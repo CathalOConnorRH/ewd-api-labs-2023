@@ -13,6 +13,5 @@
                 "mongodb.mongodb-vscode"
             ]
         }
-    },
-    "forwardPorts": [8080, 27017]
+    }
 }
