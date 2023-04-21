@@ -18,9 +18,16 @@ export default (dependencies) => {
         //output
         response.status(200).json(movies);
     };
+    const getUpcomingMovies = async (request, response, next) => {
+        // Treatment
+        const movies = await moviesService.getUpcomingMovies(dependencies);
+        //output
+        response.status(200).json(movies);
+    };
 
     return {
         getMovie,
-        find
+        find,
+        getUpcomingMovies
     };
 };

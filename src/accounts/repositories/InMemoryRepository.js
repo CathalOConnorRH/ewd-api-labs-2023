@@ -36,4 +36,5 @@ export default class extends AccountRepository {
     dataAsArray() {
         return Object.keys(this.data).map(key => this.data[key]);
     }
+
 }
