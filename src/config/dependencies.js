@@ -1,9 +1,12 @@
 import AccountsRepositoryInMemory from '../accounts/repositories/InMemoryRepository';
 import AccountsRepositoryMongo from '../accounts/repositories/MongoAccountRepository';
 import AccountSchema from '../accounts/validators';
+import Authenticator from '../accounts/security/simple';
 
 const buildDependencies = () => {
   const dependencies = {
+    accountSchema: AccountSchema,
+    authenticator: new Authenticator()
   };
 
   console.log("DB "+ process.env.DATABASE_DIALECT)
@@ -16,7 +19,7 @@ const buildDependencies = () => {
   } else {
     throw new Error('Add DB Support to project');
   }
-  dependencies.accountSchema = AccountSchema;
+  //dependencies.accountSchema = AccountSchema;
 
   return dependencies;
 };
