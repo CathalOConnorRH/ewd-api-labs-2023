@@ -1,7 +1,8 @@
 import Account from '../entities/Account';
 
 export default {
-  registerAccount: async  (firstName, lastName, email, password, {accountsRepository}) => {
+  registerAccount: async  (firstName, lastName, email, password, {accountsRepository, authenticator}) => {
+    password = await authenticator.encrypt(password);
     const account = new Account(undefined, firstName, lastName, email, password);
     return accountsRepository.persist(account);
   },
@@ -14,7 +15,8 @@ export default {
   findByEmail: (email, {accountsRepository})=>{
     return accountsRepository.getByEmail(email);
   },
-  updateAccount: (id, firstName, lastName, email, password, { accountsRepository }) => {
+  updateAccount: async (id, firstName, lastName, email, password, { accountsRepository, authenticator }) => {
+    password = await authenticator.encrypt(password);
     const account = new Account(id, firstName, lastName, email, password);
     return accountsRepository.merge(account);
   },
