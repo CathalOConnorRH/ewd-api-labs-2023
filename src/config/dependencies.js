@@ -3,17 +3,20 @@ import AccountsRepositoryMongo from '../accounts/repositories/MongoAccountReposi
 import GenresRepositoryMongo from '../genres/repositories/MongoGenreRepository';
 import AccountSchema from '../accounts/validators';
 import Authenticator from '../accounts/security/BCryptAuthenticator';
+import TokenManager from './../accounts/security/JWTToken';
 
 const buildDependencies = () => {
   const dependencies = {
     accountSchema: AccountSchema,
-    authenticator: new Authenticator()
+    authenticator: new Authenticator(),
+    tokenManager: TokenManager
   };
 
   console.log("DB "+ process.env.DATABASE_DIALECT)
   if (process.env.DATABASE_DIALECT === "in-memory") {
     dependencies.accountsRepository = new AccountsRepositoryInMemory();
   } else if (process.env.DATABASE_DIALECT === "mongo") {
+    dependencies.tokenManager = new TokenManager();
     dependencies.accountsRepository = new AccountsRepositoryMongo();
     dependencies.genresRepository = new GenresRepositoryMongo();
   } else if (process.env.DATABASE_DIALECT === "mysql") {

@@ -20,13 +20,13 @@ export default {
     const account = new Account(id, firstName, lastName, email, password);
     return accountsRepository.merge(account);
   },
-  authenticate: async (email, password, {accountsRepository, authenticator}) => {
+  authenticate: async (email, password, {accountsRepository, authenticator, tokenManager}) => {
     const account = await accountsRepository.getByEmail(email);
     const result = await authenticator.compare(password, account.password);
     if (!result) {
         throw new Error('Bad credentials');
     }
-    const token = JSON.stringify({ email: account.email });//JUST Temporary!!! TODO: make it better
+    const token = tokenManager.generate({ email: account.email });
   return token;
   },
   getFavourites: async (accountId, { accountsRepository }) => {
@@ -41,5 +41,13 @@ export default {
     }
     return await accountsRepository.merge(account);
 
-  }
+  },
+  verifyToken:   async (token,{accountsRepository, tokenManager}) => {
+    const decoded = await tokenManager.decode(token);
+    const user = await accountsRepository.getByEmail(decoded.email);
+    if (!user) {
+        throw new Error('Bad token');
+    }
+    return user.email;
+}
 };
