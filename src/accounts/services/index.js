@@ -16,7 +16,7 @@ export default {
   },
   updateAccount: (id, firstName, lastName, email, password, { accountsRepository }) => {
     const account = new Account(id, firstName, lastName, email, password);
-    return accountsRepository.merge(account)
+    return accountsRepository.merge(account);
   },
   authenticate: async (email, password, {accountsRepository, authenticator}) => {
     const account = await accountsRepository.getByEmail(email);
@@ -33,7 +33,10 @@ export default {
   },
   addFavourite: async (accountId, movieId, { accountsRepository }) => {
     const account = await accountsRepository.get(accountId);
-    account.favourites.push(movieId);
+    if(!account.favourites.includes(movieId)){
+      account.favourites.push(movieId);
+
+    }
     return await accountsRepository.merge(account);
 
   }
