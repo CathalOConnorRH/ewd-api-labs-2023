@@ -9,7 +9,7 @@ export default (dependencies) => {
         // Treatment
         const account = await accountService.registerAccount(firstName, lastName, email, password, dependencies);
         //output
-        response.status(201).json(account)
+        response.status(201).json(account);
     };
     const getAccount = async (request, response, next) => {
         //input
@@ -28,7 +28,7 @@ export default (dependencies) => {
     const updateAccount = async (request, response, next) => {
         // Input
         const id = request.params.id;
-        const {firstName, lastName, email, password} = request.body
+        const { firstName, lastName, email, password } = request.body
         // Treatment
         const account = await accountService.updateAccount(id, firstName, lastName, email, password, dependencies)
         //output
@@ -42,7 +42,7 @@ export default (dependencies) => {
         } catch (error) {
             response.status(401).json({ message: 'Unauthorised' });
         }
-      };
+    };
     const addFavourite = async (request, response, next) => {
         try {
             const { movieId } = request.body;
@@ -63,19 +63,19 @@ export default (dependencies) => {
         }
     };
     const verify = async (request, response, next) => {
-        try { 
-        // Input
-        const authHeader = request.headers.authorization;
+        try {
+            // Input
+            const authHeader = request.headers.authorization;
 
-        // Treatment
-        const accessToken = authHeader.split(" ")[1];
-        const user = await accountService.verifyToken(accessToken, dependencies);
+            // Treatment
+            const accessToken = authHeader.split(" ")[1];
+            const user = await accountService.verifyToken(accessToken, dependencies);
 
-        //output
-        next();
-    }catch(err){
-        //Token Verification Failed
-        next(new Error(`Verification Failed ${err.message}`));
+            //output
+            next();
+        } catch (err) {
+            //Token Verification Failed
+            next(new Error(`Verification Failed ${err.message}`));
         }
     };
 
