@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import logger from '../utils/Winston';
 
 dotenv.config();
 
@@ -13,13 +12,13 @@ export default {
             const connection = await mongoose.connection;
 
             connection.on('error', (err) => {
-                logger.error(`database connection error: ${err}`);
+                console.log(`database connection error: ${err}`);
             });
             connection.on('disconnected', () => {
-                logger.info('database disconnected');
+                console.log('database disconnected');
             });
             connection.once('open', async () => {
-                logger.info(`database connected to ${connection.name} on ${connection.host}`);
+                console.log(`database connected to ${connection.name} on ${connection.host}`);
                 //delete the existing  collections if in development mode
                 if (process.env.NODE_ENV == "development") {
 
