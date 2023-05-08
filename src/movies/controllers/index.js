@@ -1,4 +1,5 @@
 import moviesService from "./../services";
+import logger from '../../utils/Winston';
 
 export default (dependencies) => {
 
