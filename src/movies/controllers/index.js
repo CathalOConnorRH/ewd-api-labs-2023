@@ -3,6 +3,34 @@ import logger from '../../utils/Winston';
 
 export default (dependencies) => {
 
+    const getMovieImages = async (request, response, next) => {
+        //input
+        const movieId = request.params.id;
+        // Treatment
+        const movieImages = await moviesService.getMovieImages(movieId, dependencies);
+        //output
+        response.status(200).json(movieImages);
+    };
+
+    const getMovieCredits = async (request, response, next) => {
+        //input
+        const movieId = request.params.id;
+        // Treatment
+        const movieCredits = await moviesService.getMovieCredits(movieId, dependencies);
+        //output
+        response.status(200).json(movieCredits);
+    };
+
+    const getMovieSimilar = async (request, response, next) => {
+        //input
+        const movieId = request.params.id;
+        // Treatment
+        const movieSimilar = await moviesService.getMovieSimilar(movieId, dependencies);
+        //output
+        response.status(200).json(movieSimilar);
+    };
+
+
     const getMovie = async (request, response, next) => {
         //input
         const movieId = request.params.id;
@@ -29,6 +57,9 @@ export default (dependencies) => {
     return {
         getMovie,
         find,
-        getUpcomingMovies
+        getUpcomingMovies,
+        getMovieCredits,
+        getMovieImages,
+        getMovieSimilar
     };
 };

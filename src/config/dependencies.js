@@ -13,7 +13,7 @@ const buildDependencies = () => {
     tokenManager: TokenManager
   };
 
-  logger.info("DB " + process.env.DATABASE_DIALECT)
+  logger.info("DB " + process.env.DATABASE_DIALECT);
   if (process.env.DATABASE_DIALECT === "in-memory") {
     dependencies.accountsRepository = new AccountsRepositoryInMemory();
   } else if (process.env.DATABASE_DIALECT === "mongo") {

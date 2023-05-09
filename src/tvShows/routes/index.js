@@ -1,34 +1,34 @@
 import express from 'express';
-import MoviesController from '../controllers';
+import TvShowsController from '../controllers';
 import AccountsController from '../../accounts/controllers';
 import Analytics from '@segment/analytics-node';
 
-const createMoviesRouter = (dependencies) => {
+const createTvShowsRouter = (dependencies) => {
     const router = express.Router();
     // load controllers with dependencies
-    const moviesController = MoviesController(dependencies);
+    const tvShowsController = TvShowsController(dependencies);
     const accountsController = AccountsController(dependencies);
 
     //router.route('/*')
     //    .all(accountsController.verify); 
 
     router.route('/:id')
-        .get(moviesController.getMovie);
+        .get(tvShowsController.getTvShow);
 
     router.route('/')
-        .get(moviesController.find);
+        .get(tvShowsController.find);
 
-    router.route('/upcoming')
-        .get(moviesController.getUpcomingMovies);
+    router.route('/popular')
+        .get(tvShowsController.getPopularTvShows);
 
     router.route('/:id/images')
-        .get(moviesController.getMovieImages);
+        .get(tvShowsController.getTvShowImages);
 
     router.route('/:id/credits')
-        .get(moviesController.getMovieCredits);
+        .get(tvShowsController.getTvShowCredits);
 
     router.route('/:id/similar')
-        .get(moviesController.getMovieSimilar);
+        .get(tvShowsController.getTvShowSimilar);
     return router;
 };
-export default createMoviesRouter;
+export default createTvShowsRouter;

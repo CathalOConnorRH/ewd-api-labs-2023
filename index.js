@@ -4,8 +4,11 @@ import createAccountsRouter from './src/accounts/routes';
 import buildDependencies from "./src/config/dependencies";
 import createMoviesRouter from './src/movies/routes';
 import createGenresRouter from './src/genres/routes';
+import createTvShowsRouter from './src/tvShows/routes';
+
 import db from './src/config/db';
 import errorHandler from './src/utils/ErrorHandler';
+import createPeopleRouter from './src/people/routes';
 const logger = require("./src/utils/Winston");
 const morganMiddleware = require("./src/utils/Morgan");
 
@@ -25,6 +28,8 @@ app.use(errorHandler.successHandler);
 app.use('/api/movies', createMoviesRouter(dependencies));
 app.use('/api/genres', createGenresRouter(dependencies));
 app.use('/api/accounts', createAccountsRouter(dependencies));
+app.use('/api/tvshows', createTvShowsRouter(dependencies));
+app.use('/api/person', createPeopleRouter(dependencies));
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(errorHandler.errorHandler);
 
