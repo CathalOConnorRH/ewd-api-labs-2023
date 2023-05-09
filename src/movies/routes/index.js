@@ -1,7 +1,6 @@
 import express from 'express';
 import MoviesController from '../controllers';
 import AccountsController from '../../accounts/controllers';
-import Analytics from '@segment/analytics-node';
 
 const createMoviesRouter = (dependencies) => {
     const router = express.Router();
@@ -9,8 +8,8 @@ const createMoviesRouter = (dependencies) => {
     const moviesController = MoviesController(dependencies);
     const accountsController = AccountsController(dependencies);
 
-    //router.route('/*')
-    //    .all(accountsController.verify); 
+    router.route('/*')
+        .all(accountsController.verify);
 
     router.route('/:id')
         .get(moviesController.getMovie);

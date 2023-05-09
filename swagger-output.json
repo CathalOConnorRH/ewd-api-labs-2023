@@ -61,6 +61,27 @@
         "responses": {}
       }
     },
+    "/api/movies/{id}/images": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/movies/{id}/credits": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/movies/{id}/similar": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/api/genres/": {
       "post": {
         "description": "",
@@ -117,6 +138,62 @@
         "parameters": [],
         "responses": {}
       },
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/tvshows/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/tvshows/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/tvshows/popular": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/tvshows/{id}/images": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/tvshows/{id}/credits": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/tvshows/{id}/similar": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/person/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/person/{id}/images": {
       "get": {
         "description": "",
         "parameters": [],

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test jest",
     "start-gendoc": "node swagger.js"
   },
   "author": "CathalOConnorRH",
@@ -22,14 +22,13 @@
     "swagger-ui-express": "^4.6.2"
   },
   "dependencies": {
-    "@segment/analytics-node": "^1.0.0-beta.26",
     "axios": "^1.3.6",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.4",
+    "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "uniqid": "^5.4.0",
     "winston": "^3.8.2"
