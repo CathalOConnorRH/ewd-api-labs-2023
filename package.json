@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node index.js",
-    "test": "newman run postman_collection.json -e environment.json --reporters cli,htmlextra --reporter-htmlextra-export ./tests/reports/report.html" ,
+    "test": "newman run postman_collection.json -e environment.json --reporters cli,htmlextra --reporter-htmlextra-export ./tests/reports/report.html",
+    "test2": "newman run tmp/working/tmpCollection.json -e environment.json --reporters cli,htmlextra --reporter-htmlextra-export ./tests/reports/report.html",
+
     "start-gendoc": "node swagger.js"
   },
   "author": "CathalOConnorRH",
@@ -22,6 +24,7 @@
     "swagger-ui-express": "^4.6.2"
   },
   "dependencies": {
+    "@apideck/portman": "^1.22.0",
     "@segment/analytics-node": "^1.0.0-beta.26",
     "axios": "^1.3.6",
     "bcryptjs": "^2.4.3",

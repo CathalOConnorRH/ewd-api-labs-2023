@@ -34,6 +34,11 @@ const port = process.env.PORT;
 app.use(successHandler);
 app.use(express.static('tests'));
 app.get('/metrics', async (_req, res) => {
+  // #swagger.tags = ['Metrics']
+  // #swagger.description = 'Endpoint for gathering node metrics.'
+  /* #swagger.responses[200] = { 
+              description: 'Returned Metrics.' 
+  } */
   analytics.track({
     event: 'metrics gathering',
     userId: 'grafana'
@@ -45,6 +50,7 @@ app.get('/metrics', async (_req, res) => {
     res.status(500).end(err);
   }
 });
+
 app.use('/api/movies', createMoviesRouter(dependencies, analytics));
 app.use('/api/genres', createGenresRouter(dependencies, analytics));
 app.use('/api/accounts', createAccountsRouter(dependencies, analytics));

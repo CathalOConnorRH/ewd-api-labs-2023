@@ -13,26 +13,26 @@ export default {
             const connection = await mongoose.connection;
 
             connection.on('error', (err) => {
-                logger.error(`database connection error: ${err}`);
+                logger.error(`Database connection error: ${err}`);
             });
             connection.on('disconnected', () => {
-                logger.info('database disconnected');
+                logger.info('Database disconnected');
             });
             connection.once('open', async () => {
-                logger.info(`database connected to ${connection.name} on ${connection.host}`);
+                logger.info(`Database connected to ${connection.name} on ${connection.host}`);
                 //delete the existing  collections if in development mode
-                if (process.env.NODE_ENV == "development") {
+                // if (process.env.NODE_ENV == "development") {
+                //     logger.info(`Environment is ` + process.env.NODE_ENV + ` Removing existing collections for development purposes`);
+                //     // Get all collections
+                //     const collections = await connection.db.listCollections().toArray();
 
-                    // Get all collections
-                    const collections = await connection.db.listCollections().toArray();
-
-                    //delete all collections
-                    collections
-                        .map((collection) => collection.name)
-                        .forEach(async (collectionName) => {
-                            connection.dropCollection(collectionName);
-                        });
-                }
+                //     //delete all collections
+                //     collections
+                //         .map((collection) => collection.name)
+                //         .forEach(async (collectionName) => {
+                //             connection.dropCollection(collectionName);
+                //         });
+                // }
             });
         }
 

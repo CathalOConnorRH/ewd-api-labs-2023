@@ -8,8 +8,8 @@ const createTvShowsRouter = (dependencies) => {
     const tvShowsController = TvShowsController(dependencies);
     const accountsController = AccountsController(dependencies);
 
-    //router.route('/*')
-    //    .all(accountsController.verify); 
+    router.route('/*')
+        .all(accountsController.verify); 
 
     router.route('/:id')
         .get(tvShowsController.getTvShow);
@@ -25,6 +25,9 @@ const createTvShowsRouter = (dependencies) => {
 
     router.route('/:id/credits')
         .get(tvShowsController.getTvShowCredits);
+
+    router.route('/:id/reviews')
+        .get(tvShowsController.getTvShowReviews);
 
     router.route('/:id/similar')
         .get(tvShowsController.getTvShowSimilar);

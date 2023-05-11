@@ -2,10 +2,10 @@ import express from 'express';
 import AccountsController from '../controllers';
 import ValidationController from '../controllers/ValidationController'; //add to import statements at top of file
 
-const createRouter = (dependencies) => {
+const createRouter = (dependencies, analytics) => {
     const router = express.Router();
     // load controller with dependencies
-    const accountsController = AccountsController(dependencies);
+    const accountsController = AccountsController(dependencies,analytics);
     const validationController = ValidationController(dependencies);//Add this lineLoad validation controller with dependencies
 
     router.route('/')

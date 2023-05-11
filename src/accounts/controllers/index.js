@@ -1,7 +1,7 @@
 import req from "express/lib/request";
 import accountService from "../services";
 
-export default (dependencies) => {
+export default (dependencies,analytics) => {
 
     const createAccount = async (request, response, next) => {
         // Input
@@ -9,6 +9,11 @@ export default (dependencies) => {
         // Treatment
         const account = await accountService.registerAccount(firstName, lastName, email, password, dependencies);
         //output
+      
+        analytics.track({
+            event: 'Create Account',
+            userId: email,
+        });
         response.status(201).json(account);
     };
     const getAccount = async (request, response, next) => {
@@ -17,12 +22,24 @@ export default (dependencies) => {
         // Treatment
         const account = await accountService.getAccount(accountId, dependencies);
         //output
+        analytics.track({
+            event: 'Get Account by ID',
+            userId: account.email,
+            properties: {
+                accountId: accountId
+              }
+        });
         response.status(200).json(account);
     };
     const listAccounts = async (request, response, next) => {
         // Treatment
         const accounts = await accountService.find(dependencies);
         //output
+      
+        analytics.track({
+            event: 'List Accounts',
+            userId: "user",
+        });
         response.status(200).json(accounts);
     };
     const updateAccount = async (request, response, next) => {
@@ -32,12 +49,24 @@ export default (dependencies) => {
         // Treatment
         const account = await accountService.updateAccount(id, firstName, lastName, email, password, dependencies)
         //output
+      
+        analytics.track({
+            event: 'Update Account',
+            userId: email,
+        });
         response.status(201).json(account);
     };
     const authenticateAccount = async (request, response, next) => {
         try {
             const { email, password } = request.body;
             const token = await accountService.authenticate(email, password, dependencies);
+
+           
+            const user = await accountService.verifyToken(token, dependencies);
+            analytics.track({
+                event: 'Authenticate Account',
+                userId: user,
+            });
             response.status(200).json({ token: `BEARER ${token}` });
         } catch (error) {
             response.status(401).json({ message: 'Unauthorised' });
@@ -70,9 +99,26 @@ export default (dependencies) => {
             // Treatment
             const accessToken = authHeader.split(" ")[1];
             const user = await accountService.verifyToken(accessToken, dependencies);
-
+            
             //output
             next();
+        } catch (err) {
+            //Token Verification Failed
+            next(new Error(`Verification Failed ${err.message}`));
+        }
+    };
+
+    const getUser = async (request, response, next) => {
+        try {
+            // Input
+            const authHeader = request.headers.authorization;
+
+            // Treatment
+            const accessToken = authHeader.split(" ")[1];
+            const user = await accountService.verifyToken(accessToken, dependencies);
+
+            //output
+            response.status(200).json(user);
         } catch (err) {
             //Token Verification Failed
             next(new Error(`Verification Failed ${err.message}`));
@@ -87,6 +133,7 @@ export default (dependencies) => {
         authenticateAccount,
         addFavourite,
         getFavourites,
-        verify
+        verify,
+        getUser
     };
 };

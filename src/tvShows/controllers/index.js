@@ -1,5 +1,4 @@
 import tvShowsService from "./../services";
-import logger from '../../utils/Winston';
 
 export default (dependencies) => {
 
@@ -28,6 +27,16 @@ export default (dependencies) => {
         const tvShowSimilar = await tvShowsService.getTvShowSimilar(tvShowId, dependencies);
         //output
         response.status(200).json(tvShowSimilar);
+
+    };
+
+    const getTvShowReviews = async (request, response, next) => {
+        //input
+        const tvShowId = request.params.id;
+        // Treatment
+        const tvShowReviews = await tvShowsService.getTvShowReviews(tvShowId, dependencies);
+        //output
+        response.status(200).json(tvShowReviews);
     };
 
     const getTvShow = async (request, response, next) => {
@@ -59,6 +68,7 @@ export default (dependencies) => {
         getPopularTvShows,
         getTvShowImages,
         getTvShowCredits,
-        getTvShowSimilar
+        getTvShowSimilar,
+        getTvShowReviews
     };
 };
