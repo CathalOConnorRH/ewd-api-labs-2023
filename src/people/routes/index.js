@@ -1,7 +1,6 @@
 import express from 'express';
 import PeopleController from '../controllers';
 import AccountsController from '../../accounts/controllers';
-import Analytics from '@segment/analytics-node';
 
 const createPeopleRouter = (dependencies) => {
     const router = express.Router();

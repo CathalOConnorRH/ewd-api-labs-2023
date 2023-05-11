@@ -1,7 +1,7 @@
 import moviesService from "./../services";
 import logger from '../../utils/Winston';
 
-export default (dependencies) => {
+export default (dependencies, analytics) => {
 
     const getMovieImages = async (request, response, next) => {
         //input
@@ -9,6 +9,10 @@ export default (dependencies) => {
         // Treatment
         const movieImages = await moviesService.getMovieImages(movieId, dependencies);
         //output
+        analytics.track({
+            event: 'Get Movie Images',
+            userId: "request.body",
+        });
         response.status(200).json(movieImages);
     };
 
@@ -18,6 +22,10 @@ export default (dependencies) => {
         // Treatment
         const movieCredits = await moviesService.getMovieCredits(movieId, dependencies);
         //output
+        analytics.track({
+            event: 'Get Movie Credits',
+            userId: "request.body",
+        });
         response.status(200).json(movieCredits);
     };
 
@@ -27,6 +35,10 @@ export default (dependencies) => {
         // Treatment
         const movieSimilar = await moviesService.getMovieSimilar(movieId, dependencies);
         //output
+        analytics.track({
+            event: 'Get Similar Movies',
+            userId: "request.body",
+        });
         response.status(200).json(movieSimilar);
     };
 
@@ -37,6 +49,10 @@ export default (dependencies) => {
         // Treatment
         const movie = await moviesService.getMovie(movieId, dependencies);
         //output
+        analytics.track({
+            event: 'Get Movie By ID',
+            userId: "request.body",
+        });
         response.status(200).json(movie);
     };
     const find = async (request, response, next) => {
@@ -45,12 +61,20 @@ export default (dependencies) => {
         // Treatment
         const movies = await moviesService.find(query, dependencies);
         //output
+        analytics.track({
+            event: 'Get Movies',
+            userId: "request.body",
+        });
         response.status(200).json(movies);
     };
     const getUpcomingMovies = async (request, response, next) => {
         // Treatment
         const movies = await moviesService.getUpcomingMovies(dependencies);
         //output
+        analytics.track({
+            event: 'Get Upcoming Movies',
+            userId: "request.body",
+        });
         response.status(200).json(movies);
     };
 

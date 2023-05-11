@@ -1,7 +1,6 @@
 import express from 'express';
 import TvShowsController from '../controllers';
 import AccountsController from '../../accounts/controllers';
-import Analytics from '@segment/analytics-node';
 
 const createTvShowsRouter = (dependencies) => {
     const router = express.Router();

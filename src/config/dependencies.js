@@ -10,7 +10,7 @@ const buildDependencies = () => {
   const dependencies = {
     accountSchema: AccountSchema,
     authenticator: new Authenticator(),
-    tokenManager: TokenManager
+    tokenManager: TokenManager,
   };
 
   logger.info("DB " + process.env.DATABASE_DIALECT);
@@ -20,6 +20,7 @@ const buildDependencies = () => {
     dependencies.tokenManager = new TokenManager();
     dependencies.accountsRepository = new AccountsRepositoryMongo();
     dependencies.genresRepository = new GenresRepositoryMongo();
+
   } else if (process.env.DATABASE_DIALECT === "mysql") {
     throw new Error('Add MySQL support');
   } else {

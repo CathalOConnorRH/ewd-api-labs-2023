@@ -5,33 +5,53 @@ import buildDependencies from "./src/config/dependencies";
 import createMoviesRouter from './src/movies/routes';
 import createGenresRouter from './src/genres/routes';
 import createTvShowsRouter from './src/tvShows/routes';
-
 import db from './src/config/db';
 import errorHandler from './src/utils/ErrorHandler';
+import successHandler from './src/utils/SuccessHandler';
+
 import createPeopleRouter from './src/people/routes';
+import { collectDefaultMetrics, register } from 'prom-client';
+import analytics from './src/utils/Analytics';
+
 const logger = require("./src/utils/Winston");
 const morganMiddleware = require("./src/utils/Morgan");
-
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output.json');
 
-dotenv.config();
-db.init(); //add BELOW dotenv.config();
-const dependencies = buildDependencies();
+logger.info("Starting to collect runtime metrics");
+collectDefaultMetrics();
 
+dotenv.config();
+db.init();
+const dependencies = buildDependencies();
 const app = express();
+
 app.use(morganMiddleware);
 app.use(express.json());
+
 const port = process.env.PORT;
 
-app.use(errorHandler.successHandler);
-app.use('/api/movies', createMoviesRouter(dependencies));
-app.use('/api/genres', createGenresRouter(dependencies));
-app.use('/api/accounts', createAccountsRouter(dependencies));
-app.use('/api/tvshows', createTvShowsRouter(dependencies));
-app.use('/api/person', createPeopleRouter(dependencies));
+app.use(successHandler);
+app.use(express.static('tests'));
+app.get('/metrics', async (_req, res) => {
+  analytics.track({
+    event: 'metrics gathering',
+    userId: 'grafana'
+  });
+  try {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+  } catch (err) {
+    res.status(500).end(err);
+  }
+});
+app.use('/api/movies', createMoviesRouter(dependencies, analytics));
+app.use('/api/genres', createGenresRouter(dependencies, analytics));
+app.use('/api/accounts', createAccountsRouter(dependencies, analytics));
+app.use('/api/tvshows', createTvShowsRouter(dependencies, analytics));
+app.use('/api/person', createPeopleRouter(dependencies, analytics));
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
-app.use(errorHandler.errorHandler);
+app.use(errorHandler);
 
 app.listen(port, () => {
   logger.info(`Server running at ${port}`);

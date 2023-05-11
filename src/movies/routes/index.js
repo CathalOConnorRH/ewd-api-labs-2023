@@ -2,14 +2,14 @@ import express from 'express';
 import MoviesController from '../controllers';
 import AccountsController from '../../accounts/controllers';
 
-const createMoviesRouter = (dependencies) => {
+const createMoviesRouter = (dependencies, analytics) => {
     const router = express.Router();
     // load controllers with dependencies
-    const moviesController = MoviesController(dependencies);
+    const moviesController = MoviesController(dependencies, analytics);
     const accountsController = AccountsController(dependencies);
 
-    router.route('/*')
-        .all(accountsController.verify);
+    //router.route('/*')
+    //    .all(accountsController.verify);
 
     router.route('/:id')
         .get(moviesController.getMovie);
