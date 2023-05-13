@@ -3,7 +3,7 @@ import accountService from "../../accounts/services";
 
 export default (dependencies, analytics) => {
 
-    const getMovieImages = async (request, response, next) => {
+    const getMovieImages = async (request, response) => {
         //input
         const movieId = request.params.id;
         // Treatment
@@ -18,13 +18,13 @@ export default (dependencies, analytics) => {
             userId: user,
             properties: {
                 movie: movieId
-              }
+            }
         });
 
         response.status(200).json(movieImages);
     };
 
-    const getMovieCredits = async (request, response, next) => {
+    const getMovieCredits = async (request, response) => {
         //input
         const movieId = request.params.id;
         // Treatment
@@ -38,13 +38,13 @@ export default (dependencies, analytics) => {
             userId: user,
             properties: {
                 movie: movieId
-              }
+            }
         });
 
         response.status(200).json(movieCredits);
     };
 
-    const getMovieSimilar = async (request, response, next) => {
+    const getMovieSimilar = async (request, response) => {
         //input
         const movieId = request.params.id;
         // Treatment
@@ -58,14 +58,14 @@ export default (dependencies, analytics) => {
             userId: user,
             properties: {
                 movie: movieId
-              }
+            }
         });
 
         response.status(200).json(movieSimilar);
     };
 
 
-    const getMovie = async (request, response, next) => {
+    const getMovie = async (request, response) => {
         //input
         const movieId = request.params.id;
         // Treatment
@@ -79,12 +79,12 @@ export default (dependencies, analytics) => {
             userId: user,
             properties: {
                 movie: movieId
-              }
+            }
         });
 
         response.status(200).json(movie);
     };
-    const find = async (request, response, next) => {
+    const find = async (request, response) => {
         // #swagger.description = "Description here..."        
         //input
         const query = request.query;
@@ -101,7 +101,7 @@ export default (dependencies, analytics) => {
 
         response.status(200).json(movies);
     };
-    const getUpcomingMovies = async (request, response, next) => {
+    const getUpcomingMovies = async (request, response) => {
         // Treatment
         const movies = await moviesService.getUpcomingMovies(dependencies);
         //output
@@ -115,11 +115,11 @@ export default (dependencies, analytics) => {
 
         response.status(200).json(movies);
     };
-    const getMovieReviews = async (request, response, next) => {
+    const getMovieReviews = async (request, response) => {
         //input
         const movieId = request.params.id;
         // Treatment
-        const movies = await moviesService.getMovieReviews(movieId,dependencies);
+        const movies = await moviesService.getMovieReviews(movieId, dependencies);
         //output
         const authHeader = request.headers.authorization;
         const accessToken = authHeader.split(" ")[1];
@@ -129,7 +129,7 @@ export default (dependencies, analytics) => {
             userId: user,
             properties: {
                 movie: movieId
-              }
+            }
         });
 
         response.status(200).json(movies);

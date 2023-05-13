@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 export default {
   getMovieImages: async (movieId) => {
     const response = await axios.get(
