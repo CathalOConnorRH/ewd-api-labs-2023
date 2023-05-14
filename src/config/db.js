@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import logger from '../utils/Winston';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 dotenv.config();
 
@@ -8,8 +9,17 @@ export default {
 
     async init() {
         if (process.env.DATABASE_DIALECT === "mongo") {
+
+            let uri = "";
+            if (process.env.NODE_ENV === "test") {
+                logger.info("Creating in memory mongo test server");
+                const mongod = await MongoMemoryServer.create();
+                uri = mongod.getUri();
+            } else {
+                uri = process.env.DATABASE_URL;
+            }
             // Connect to database
-            mongoose.connect(process.env.DATABASE_URL);
+            mongoose.connect(uri);
             const connection = await mongoose.connection;
 
             connection.on('error', (err) => {

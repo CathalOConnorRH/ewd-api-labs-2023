@@ -5,6 +5,7 @@ import buildDependencies from "./src/config/dependencies";
 import createMoviesRouter from './src/movies/routes';
 import createGenresRouter from './src/genres/routes';
 import createTvShowsRouter from './src/tvShows/routes';
+import createReviewsRouter from './src/reviews/routes';
 import db from './src/config/db';
 import errorHandler from './src/utils/ErrorHandler';
 import successHandler from './src/utils/SuccessHandler';
@@ -32,13 +33,9 @@ app.use(express.json());
 const port = process.env.PORT;
 
 app.use(successHandler);
+app.use(errorHandler);
 app.use(express.static('tests'));
 app.get('/metrics', async (_req, res) => {
-  // #swagger.tags = ['Metrics']
-  // #swagger.description = 'Endpoint for gathering node metrics.'
-  /* #swagger.responses[200] = { 
-              description: 'Returned Metrics.' 
-  } */
   analytics.track({
     event: 'metrics gathering',
     userId: 'grafana'
@@ -54,10 +51,10 @@ app.get('/metrics', async (_req, res) => {
 app.use('/api/movies', createMoviesRouter(dependencies, analytics));
 app.use('/api/genres', createGenresRouter(dependencies, analytics));
 app.use('/api/accounts', createAccountsRouter(dependencies, analytics));
+app.use('/api/reviews', createReviewsRouter(dependencies, analytics));
 app.use('/api/tvshows', createTvShowsRouter(dependencies, analytics));
 app.use('/api/person', createPeopleRouter(dependencies, analytics));
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
-app.use(errorHandler);
 
 app.listen(port, () => {
   logger.info(`Server running at ${port}`);

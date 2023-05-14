@@ -1,22 +1,21 @@
-import req from "express/lib/request";
 import accountService from "../services";
 
-export default (dependencies,analytics) => {
+export default (dependencies, analytics) => {
 
-    const createAccount = async (request, response, next) => {
+    const createAccount = async (request, response) => {
         // Input
         const { firstName, lastName, email, password } = request.body;
         // Treatment
         const account = await accountService.registerAccount(firstName, lastName, email, password, dependencies);
         //output
-      
+
         analytics.track({
             event: 'Create Account',
             userId: email,
         });
         response.status(201).json(account);
     };
-    const getAccount = async (request, response, next) => {
+    const getAccount = async (request, response) => {
         //input
         const accountId = request.params.id;
         // Treatment
@@ -27,41 +26,41 @@ export default (dependencies,analytics) => {
             userId: account.email,
             properties: {
                 accountId: accountId
-              }
+            }
         });
         response.status(200).json(account);
     };
-    const listAccounts = async (request, response, next) => {
+    const listAccounts = async (request, response) => {
         // Treatment
         const accounts = await accountService.find(dependencies);
         //output
-      
+
         analytics.track({
             event: 'List Accounts',
             userId: "user",
         });
         response.status(200).json(accounts);
     };
-    const updateAccount = async (request, response, next) => {
+    const updateAccount = async (request, response) => {
         // Input
         const id = request.params.id;
         const { firstName, lastName, email, password } = request.body
         // Treatment
         const account = await accountService.updateAccount(id, firstName, lastName, email, password, dependencies)
         //output
-      
+
         analytics.track({
             event: 'Update Account',
             userId: email,
         });
         response.status(201).json(account);
     };
-    const authenticateAccount = async (request, response, next) => {
+    const authenticateAccount = async (request, response) => {
         try {
             const { email, password } = request.body;
             const token = await accountService.authenticate(email, password, dependencies);
 
-           
+
             const user = await accountService.verifyToken(token, dependencies);
             analytics.track({
                 event: 'Authenticate Account',
@@ -99,7 +98,7 @@ export default (dependencies,analytics) => {
             // Treatment
             const accessToken = authHeader.split(" ")[1];
             const user = await accountService.verifyToken(accessToken, dependencies);
-            
+
             //output
             next();
         } catch (err) {

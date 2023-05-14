@@ -8,8 +8,8 @@ const createMoviesRouter = (dependencies, analytics) => {
     const moviesController = MoviesController(dependencies, analytics);
     const accountsController = AccountsController(dependencies);
 
-    router.route('/*')
-        .all(accountsController.verify);
+    //router.route('/*')
+    //    .all(accountsController.verify);
 
     router.route('/:id')
         .get(moviesController.getMovie);
@@ -28,10 +28,13 @@ const createMoviesRouter = (dependencies, analytics) => {
 
     router.route('/:id/similar')
         .get(moviesController.getMovieSimilar);
-    
+
     router.route('/:id/reviews')
         .get(moviesController.getMovieReviews);
-        
+
+    router.route('/:id/reviews')
+        .post(moviesController.setMovieReview);
+
     return router;
 };
 export default createMoviesRouter;

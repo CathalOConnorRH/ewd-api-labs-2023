@@ -1,5 +1,6 @@
 import moviesService from "./../services";
 import accountService from "../../accounts/services";
+import uniqid from 'uniqid';
 
 export default (dependencies, analytics) => {
 
@@ -21,7 +22,13 @@ export default (dependencies, analytics) => {
             }
         });
 
-        response.status(200).json(movieImages);
+        let status = 0;
+        if (movieImages['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movieImages);
     };
 
     const getMovieCredits = async (request, response) => {
@@ -40,8 +47,13 @@ export default (dependencies, analytics) => {
                 movie: movieId
             }
         });
-
-        response.status(200).json(movieCredits);
+        let status = 0;
+        if (movieCredits['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movieCredits);
     };
 
     const getMovieSimilar = async (request, response) => {
@@ -61,7 +73,13 @@ export default (dependencies, analytics) => {
             }
         });
 
-        response.status(200).json(movieSimilar);
+        let status = 0;
+        if (movieSimilar['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movieSimilar);
     };
 
 
@@ -81,8 +99,13 @@ export default (dependencies, analytics) => {
                 movie: movieId
             }
         });
-
-        response.status(200).json(movie);
+        let status = 0;
+        if (movie['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movie);
     };
     const find = async (request, response) => {
         // #swagger.description = "Description here..."        
@@ -99,7 +122,13 @@ export default (dependencies, analytics) => {
             userId: user,
         });
 
-        response.status(200).json(movies);
+        let status = 0;
+        if (movies['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movies);
     };
     const getUpcomingMovies = async (request, response) => {
         // Treatment
@@ -113,7 +142,13 @@ export default (dependencies, analytics) => {
             userId: user,
         });
 
-        response.status(200).json(movies);
+        let status = 0;
+        if (movies['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movies);
     };
     const getMovieReviews = async (request, response) => {
         //input
@@ -132,7 +167,23 @@ export default (dependencies, analytics) => {
             }
         });
 
-        response.status(200).json(movies);
+        let status = 0;
+        if (movies['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movies);
+    };
+
+    const setMovieReview = async (request, response) => {
+        console.log("Created " + request.body);
+        request.body.created_at = new Date();
+        request.body.updated_at = new Date();
+        request.body.id = uniqid();
+        //movieReviews.results.push(req.body); //push the new review onto the list
+        response.status(201).json(request.body);
+        return response.data;
     };
 
     return {
@@ -142,6 +193,7 @@ export default (dependencies, analytics) => {
         getMovieCredits,
         getMovieImages,
         getMovieSimilar,
-        getMovieReviews
+        getMovieReviews,
+        setMovieReview
     };
 };

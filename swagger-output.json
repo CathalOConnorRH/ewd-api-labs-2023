@@ -44,6 +44,9 @@
         "responses": {
           "200": {
             "description": "Returned Movie."
+          },
+          "404": {
+            "description": "Movie Not found"
           }
         }
       }
@@ -58,6 +61,9 @@
         "responses": {
           "200": {
             "description": "Returned List of Movies."
+          },
+          "404": {
+            "description": "Movies not found"
           }
         }
       }
@@ -72,6 +78,9 @@
         "responses": {
           "200": {
             "description": "Returned List of Upcoming Movies."
+          },
+          "404": {
+            "description": "Upcoming movies not found"
           }
         }
       }
@@ -86,6 +95,9 @@
         "responses": {
           "200": {
             "description": "Returned images of Movies."
+          },
+          "404": {
+            "description": "Movie images not found"
           }
         }
       }
@@ -100,6 +112,9 @@
         "responses": {
           "200": {
             "description": "Returned List of actors."
+          },
+          "404": {
+            "description": "Actors not found"
           }
         }
       }
@@ -114,6 +129,9 @@
         "responses": {
           "200": {
             "description": "Returned List of Similar Movies."
+          },
+          "404": {
+            "description": "Similar movies not found"
           }
         }
       }
@@ -138,6 +156,9 @@
         "responses": {
           "200": {
             "description": "Returned List of Genres."
+          },
+          "404": {
+            "description": "Genres not found"
           }
         }
       }
@@ -152,6 +173,9 @@
         "responses": {
           "200": {
             "description": "Returned Genre by ID."
+          },
+          "404": {
+            "description": "Genre not found"
           }
         }
       }
@@ -166,6 +190,9 @@
         "responses": {
           "200": {
             "description": "Account created."
+          },
+          "404": {
+            "description": "Unable to create account"
           }
         }
       },
@@ -178,6 +205,9 @@
         "responses": {
           "200": {
             "description": "List of accounts returned."
+          },
+          "404": {
+            "description": "Accounts not found"
           }
         }
       }
@@ -192,6 +222,9 @@
         "responses": {
           "200": {
             "description": "Account details returned."
+          },
+          "404": {
+            "description": "Account not found"
           }
         }
       },
@@ -204,6 +237,9 @@
         "responses": {
           "200": {
             "description": "Updated account details returned."
+          },
+          "404": {
+            "description": "Account couldn't be updated"
           }
         }
       }
@@ -215,9 +251,11 @@
         ],
         "description": "Gets a security token for a specific account",
         "parameters": [],
-        "responses": {"200": {
+        "responses": {
+          "200": {
             "description": "Security token returned."
-          }}
+          }
+        }
       }
     },
     "/api/accounts/{id}/favourites": {
@@ -230,6 +268,9 @@
         "responses": {
           "200": {
             "description": "Favourite added to account."
+          },
+          "404": {
+            "description": "Couldn't add favourite"
           }
         }
       },
@@ -253,9 +294,14 @@
         ],
         "description": "Gets a TV Show by ID",
         "parameters": [],
-        "responses": {"200": {
+        "responses": {
+          "200": {
             "description": "TV Show returned."
-          }}
+          },
+          "404": {
+            "description": "TV Show not found"
+          }
+        }
       }
     },
     "/api/tvshows/": {
@@ -268,6 +314,9 @@
         "responses": {
           "200": {
             "description": "List of TV shows returned."
+          },
+          "404": {
+            "description": "TV Shows not found"
           }
         }
       }
@@ -282,6 +331,9 @@
         "responses": {
           "200": {
             "description": "List of popular TV Shows returned."
+          },
+          "404": {
+            "description": "Popular TV Shows not found"
           }
         }
       }
@@ -296,7 +348,11 @@
         "responses": {
           "200": {
             "description": "Returned images of TV Shows."
-          }}
+          },
+          "404": {
+            "description": "TV Show images not found"
+          }
+        }
       }
     },
     "/api/tvshows/{id}/credits": {
@@ -309,6 +365,9 @@
         "responses": {
           "200": {
             "description": "Returned actors for a specific TV Show"
+          },
+          "404": {
+            "description": "TV Show actors not found"
           }
         }
       }
@@ -337,6 +396,9 @@
         "responses": {
           "200": {
             "description": "Actor details returned."
+          },
+          "404": {
+            "description": "Similar TV Shows not found"
           }
         }
       }
@@ -352,7 +414,10 @@
           "200": {
             "description": "Actor images returned"
           }
-        }
+        },
+          "404": {
+            "description": "Actor images not found"
+          }
       }
     }
   },
