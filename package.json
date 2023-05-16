@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node index.js",
-    "test": "newman run postman_collection.json -e environment.json --reporters cli,htmlextra --reporter-htmlextra-export ./tests/reports/report.html",
-    "run and test": "NODE_ENV=test & npm run start & npm run test"
-  },
+    "test": "newman run -n 10 tests/postman_collection.json -e tests/environment.json --reporters cli,htmlextra --reporter-htmlextra-export ./tests/reports/report.html"
+    },
   "author": "CathalOConnorRH",
   "license": "ISC",
   "devDependencies": {
@@ -18,6 +17,7 @@
     "newman": "^5.3.2",
     "newman-reporter-htmlextra": "^1.22.11",
     "nodemon": "^2.0.22",
+    "parallelshell": "^3.0.2",
     "swagger-autogen": "^2.23.1",
     "swagger-ui-express": "^4.6.2"
   },

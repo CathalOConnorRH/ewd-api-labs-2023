@@ -1,0 +1,1020 @@
+{
+	"info": {
+		"_postman_id": "963e5f61-51db-44dd-805c-7df2520d77c8",
+		"name": "EWD Ass2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11446383",
+		"_collection_link": "https://red-star-180997.postman.co/workspace/EWD-Assignment-2~9c2dc4a8-4eda-4d85-b507-a465702d8b75/collection/11446383-963e5f61-51db-44dd-805c-7df2520d77c8?action=share&creator=11446383&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Metrics",
+			"item": [
+				{
+					"name": "Get Metrics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Metrics: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"  pm.test(\"Get Metrics: Response Object contains metrics helper comments\",()=>{",
+									"    pm.expect(pm.response.text()).to.include(\"# HELP process_cpu_user_seconds_total Total user CPU time spent in seconds.\");",
+									"  })"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/metrics",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"metrics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Add account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add Account: Successful Response\",()=>pm.response.to.have.status(201))",
+									"",
+									"pm.test(\"Add Account: Successful Response includes the correct data\",()=>{",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData.id).to.be.a(\"string\");",
+									"    pm.expect(jsonData.firstName).to.eql(pm.environment.get(\"firstName\"));",
+									"    pm.expect(jsonData.lastName).to.eql(pm.environment.get(\"lastName\"));",
+									"    pm.expect(jsonData.email).to.eql(pm.environment.get(\"email\").toLowerCase());",
+									"",
+									"    pm.environment.set(\"accountId\", jsonData.id);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'))",
+									"pm.environment.set(\"lastName\",pm.variables.replaceIn('{{$randomLastName}}'))",
+									"pm.environment.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase())",
+									"pm.environment.set(\"password\",\"Test123@\")",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"{{firstName}}\",\n  \"lastName\": \"{{lastName}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/accounts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"  const jsonData = pm.response.json();",
+									"",
+									"  pm.test(\"Get Token: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"  pm.test(\"Get Token: Response Object contains token\",()=>{",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"token\");",
+									"    pm.expect(jsonData.token).to.be.a(\"string\");",
+									"  })",
+									"  pm.test(\"Get Token: Response contains correctly formatted token\",()=>{",
+									"    const splitArray = jsonData.token.split(\" \")",
+									"    pm.expect(splitArray[0].toLowerCase()).to.eql(\"bearer\");",
+									"    pm.expect(splitArray[1]).length.to.be.greaterThan(25);",
+									"    pm.environment.set(\"authToken\",splitArray[1])",
+									"  })",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"email\": \"{{email}}\",\"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/accounts/security/token/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"security",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Accounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Accounts: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									" pm.test(\"Get Accounts: Response Object contains at least one account\",()=>{",
+									"         const jsonData = pm.response.json();",
+									"         pm.expect(jsonData.length).to.be.greaterThan(1);",
+									"",
+									"  })"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/accounts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "set Favourites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add Favourite to account: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Add Account: Successful Response includes the correct data\",()=>{",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData.id).to.be.a(\"string\");",
+									"    pm.expect(jsonData.firstName).to.eql(pm.environment.get(\"firstName\"));",
+									"    pm.expect(jsonData.lastName).to.eql(pm.environment.get(\"lastName\"));",
+									"    pm.expect(jsonData.email).to.eql(pm.environment.get(\"email\").toLowerCase());",
+									"    pm.expect(jsonData.favourites.length).to.be.eql(1);",
+									"    pm.environment.set(\"accountId\", jsonData.id);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"movieId\": 1234}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/accounts/{{accountId}}/favourites",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"{{accountId}}",
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Favourites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Favourite: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Favourites: Successful Response includes the correct data\",()=>{",
+									"    const jsonData = pm.response.json();",
+									"//    pm.expect(jsonData.id).to.be.a(\"string\");",
+									"//    pm.expect(jsonData.firstName).to.eql(pm.environment.get(\"firstName\"));",
+									"//    pm.expect(jsonData.lastName).to.eql(pm.environment.get(\"lastName\"));",
+									"//    pm.expect(jsonData.email).to.eql(pm.environment.get(\"email\").toLowerCase());",
+									"",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/accounts/{{accountId}}/favourites",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"{{accountId}}",
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movies",
+			"item": [
+				{
+					"name": "Get movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movies: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"",
+									"pm.test(\"Get Movies: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.results[0].title).to.be.a('string');",
+									"    pm.expect(jsonData.results[0].id).to.be.a('number');",
+									"    pm.expect(jsonData.results.length).to.be.greaterThan(1);",
+									"",
+									"    pm.environment.set(\"movieId\",jsonData.results[0].id);",
+									"    pm.environment.set(\"movieTitle\", jsonData.results[0].title);",
+									"    pm.environment.set(\"release_date\", jsonData.results[0].release_date);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/movies",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie by iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie By Id Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Movie By Id contains the correct properties\", () => {",
+									"    //parse the response JSON and test three properties",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.title).to.eql(pm.environment.get(\"movieTitle\"));",
+									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"movieId\"));",
+									"    pm.expect(responseJson.release_date).to.eql(pm.environment.get(\"release_date\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/movies/{{movieId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"{{movieId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie reviews by movie id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie reviews: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"",
+									"pm.test(\"Get Movie reviews: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.results[0].content).to.be.a('string');",
+									"    pm.expect(parseInt(jsonData.results[0].movieId)).to.be.eql(parseInt(pm.environment.get(\"movieId\")));",
+									"    pm.expect(jsonData.results.length).to.be.eql(jsonData.results[0].total_results);",
+									"",
+									"    pm.environment.set(\"movieId\",jsonData.results[0].movieId);",
+									"    pm.environment.set(\"movieTitle\", jsonData.results[0].title);",
+									"    pm.environment.set(\"release_date\", jsonData.results[0].release_date);",
+									"    pm.environment.set(\"total_results\", jsonData.results.total_results);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/reviews/movies/{{movieId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"reviews",
+								"movies",
+								"{{movieId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie reviews by movie id Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie reviews: Successful Request\",()=>pm.response.to.have.status(201))",
+									"",
+									"",
+									"pm.test(\"Get Movie reviews - add review: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.content).to.be.a('string');",
+									"    pm.expect(jsonData.movieId).to.be.eql(pm.environment.get(\"movieId\"));",
+									"    pm.expect(jsonData.content).to.eql(\"this is a test review for movie \" + pm.environment.get(\"movieId\")); ",
+									"",
+									"    pm.environment.set(\"reviewId\", jsonData.id);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author\": \"coconnor\",\n  \"review\": \"this is a test review for movie {{movieId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/reviews/movies/{{movieId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"reviews",
+								"movies",
+								"{{movieId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie reviews by movie id Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie reviews: Successful Request\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Movie reviews - add review: Response Object contains contains the correct properties\", () => {",
+									"    var jsonData = pm.response.json()",
+									"    var resultsCount = 0;",
+									"   _.each(pm.response.json().results, (item) => {",
+									"        if(item.id === pm.environment.get(\"reviewId\")) {",
+									"            console.log(item)",
+									"            pm.expect(item.id).eql(pm.environment.get(\"reviewId\"));",
+									"            pm.expect(item.content).eql(\"this is a test review for movie \" + pm.environment.get(\"movieId\"));",
+									"            resultsCount++;",
+									"        }",
+									"    })",
+									"    console.log(resultsCount);",
+									"    pm.expect(resultsCount).eql(1);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/reviews/movies/{{movieId}}/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"reviews",
+								"movies",
+								"{{movieId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TVShows",
+			"item": [
+				{
+					"name": "Get tv shows",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get TVShows: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"",
+									"pm.test(\"Get TVShows: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.results[0].name).to.be.a('string');",
+									"    pm.expect(jsonData.results[0].id).to.be.a('number');",
+									"    pm.expect(jsonData.results.length).to.be.greaterThan(1);",
+									"",
+									"    pm.environment.set(\"tvShowId\",jsonData.results[0].id);",
+									"    pm.environment.set(\"tvShowTitle\", jsonData.results[0].name);",
+									"    pm.environment.set(\"first_air_date\", jsonData.results[0].first_air_date);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tvshows",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tvshows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get TV Show by iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get TVShow By Id Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get TVShow By Id contains the correct properties\", () => {",
+									"    //parse the response JSON and test three properties",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"tvShowTitle\"));",
+									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"tvShowId\"));",
+									"    pm.expect(responseJson.first_air_date).to.eql(pm.environment.get(\"first_air_date\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tvshows/{{tvShowId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tvshows",
+								"{{tvShowId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get TV Show reviews by tv show id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get TVShow reviews: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"",
+									"pm.test(\"Get TVShow reviews: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    console.log(jsonData.results.length);",
+									"    if (jsonData.results.length === undefined ){",
+									"",
+									"    } else {",
+									"    pm.expect(jsonData.results[0].content).to.be.a('string');",
+									"    pm.expect(parseInt(jsonData.results[0].tvShowId)).to.be.eql(parseInt(pm.environment.get(\"tvShowId\")));",
+									"    pm.expect(jsonData.results.length).to.be.eql(jsonData.results[0].total_results);",
+									"",
+									"    pm.environment.set(\"tvShowId\",jsonData.results[0].tvShowId);",
+									"    pm.environment.set(\"tvShowTitle\", jsonData.results[0].name);",
+									"    pm.environment.set(\"first_air_date\", jsonData.results[0].first_air_date);",
+									"    pm.environment.set(\"total_results\", jsonData.results.total_results);",
+									"    }",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/reviews/tvshows/{{tvShowId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"reviews",
+								"tvshows",
+								"{{tvShowId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add TV Show review by tv show id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add TV Show reviews: Successful Request\",()=>pm.response.to.have.status(201))",
+									"",
+									"",
+									"pm.test(\"Add TV Show reviews - add review: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.content).to.be.a('string');",
+									"    pm.expect(parseInt(jsonData.tvShowId)).to.be.eql(pm.environment.get(\"tvShowId\"));",
+									"    pm.expect(jsonData.content).to.eql(\"this is a test review for tv show \" + pm.environment.get(\"tvShowId\")); ",
+									"",
+									"    pm.environment.set(\"tvShowReviewId\", jsonData.id);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author\": \"coconnor\",\n  \"review\": \"this is a test review for tv show {{tvShowId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/reviews/tvshows/{{tvShowId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"reviews",
+								"tvshows",
+								"{{tvShowId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get TV Show reviews by TV Show id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get TV Show reviews: Successful Request\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get TV Show reviews - add review: Response Object contains contains the correct properties\", () => {",
+									"    var jsonData = pm.response.json()",
+									"    var resultsCount = 0;",
+									"   _.each(pm.response.json().results, (item) => {",
+									"        if(item.id === pm.environment.get(\"tvShowReviewId\")) {",
+									"            console.log(item)",
+									"            pm.expect(item.id).eql(pm.environment.get(\"tvShowReviewId\"));",
+									"            pm.expect(item.content).eql(\"this is a test review for tv show \" + pm.environment.get(\"tvShowId\"));",
+									"            resultsCount++;",
+									"        }",
+									"    })",
+									"    console.log(resultsCount);",
+									"    pm.expect(resultsCount).eql(1);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/reviews/tvshows/{{tvShowId}}/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"reviews",
+								"tvshows",
+								"{{tvShowId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Actor",
+			"item": [
+				{
+					"name": "Get actors by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get actor images: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"",
+									"pm.test(\"Get actor images: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.profiles.length).greaterThan(1);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/person/974169/images",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"person",
+								"974169",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get TV Show by iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get TVShow By Id Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get TVShow By Id contains the correct properties\", () => {",
+									"    //parse the response JSON and test three properties",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"tvShowTitle\"));",
+									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"tvShowId\"));",
+									"    pm.expect(responseJson.first_air_date).to.eql(pm.environment.get(\"first_air_date\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tvshows/{{tvShowId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tvshows",
+								"{{tvShowId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "movieId",
+			"value": ""
+		},
+		{
+			"key": "authToken",
+			"value": ""
+		}
+	]
+}

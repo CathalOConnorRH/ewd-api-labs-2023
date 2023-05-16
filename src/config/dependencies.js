@@ -1,8 +1,8 @@
 import AccountsRepositoryInMemory from '../accounts/repositories/InMemoryRepository';
 import AccountsRepositoryMongo from '../accounts/repositories/MongoAccountRepository';
 import GenresRepositoryMongo from '../genres/repositories/MongoGenreRepository';
-import MoviesRepositoryMongo from '../reviews/repositories/MongoMovieReviewRepository';
-import TVShowsRepositoryMongo from '../reviews/repositories/MongoTVShowReviewRepository';
+import MovieReviewsRepositoryMongo from '../reviews/repositories/MongoMovieReviewRepository';
+import TVShowReviewsRepositoryMongo from '../reviews/repositories/MongoTVShowReviewRepository';
 import AccountSchema from '../accounts/validators';
 import Authenticator from '../accounts/security/BCryptAuthenticator';
 import TokenManager from './../accounts/security/JWTToken';
@@ -25,8 +25,8 @@ const buildDependencies = () => {
     dependencies.tokenManager = new TokenManager();
     dependencies.accountsRepository = new AccountsRepositoryMongo();
     dependencies.genresRepository = new GenresRepositoryMongo();
-    dependencies.moviesReviewRespository = new MoviesRepositoryMongo();
-    dependencies.tvShowReviewRepository = new TVShowsRepositoryMongo();
+    dependencies.movieReviewsRepository = new MovieReviewsRepositoryMongo();
+    dependencies.tvShowReviewsRepository = new TVShowReviewsRepositoryMongo();
 
   } else if (process.env.DATABASE_DIALECT === "mysql") {
     logger.Error("MySql Support is not configured");

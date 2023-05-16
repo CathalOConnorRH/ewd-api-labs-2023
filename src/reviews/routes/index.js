@@ -8,8 +8,8 @@ const createReviewsRouter = (dependencies, analytics) => {
     const reviewsController = ReviewsController(dependencies, analytics);
     const accountsController = AccountsController(dependencies);
 
-    //router.route('/*')
-    //    .all(accountsController.verify);
+    router.route('/*')
+        .all(accountsController.verify);
 
     router.route('/movies/:id')
         .get(reviewsController.getMovieReview);
@@ -21,7 +21,7 @@ const createReviewsRouter = (dependencies, analytics) => {
         .post(reviewsController.addMovieReview);
 
     router.route('/tvshows/:id')
-        .post(reviewsController.addMovieReview);
+        .post(reviewsController.addTVShowReview);
 
     return router;
 };

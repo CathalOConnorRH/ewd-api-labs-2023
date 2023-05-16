@@ -55,22 +55,32 @@ export default (dependencies, analytics) => {
     };
 
     const addMovieReview = async (request, response) => {
-        console.log("Created " + request.body);
-        request.body.created_at = new Date();
-        request.body.updated_at = new Date();
-        request.body.id = uniqid();
-        //reviewReviews.results.push(req.body); //push the new review onto the list
-        response.status(201).json(request.body);
+        // Input
+        const movieId = request.params.id;
+        const { author, review } = request.body;
+        // Treatment
+        const movieReview = await reviewsService.addMovieReview(movieId, author, review, dependencies);
+        // Output
+        response.status(201).json(movieReview);
         return response.data;
     };
 
     const addTVShowReview = async (request, response) => {
-        console.log("Created " + request.body);
-        request.body.created_at = new Date();
-        request.body.updated_at = new Date();
-        request.body.id = uniqid();
-        //reviewReviews.results.push(req.body); //push the new review onto the list
-        response.status(201).json(request.body);
+        // Input
+        const tvShowId = request.params.id;
+        const { author, review } = request.body;
+        // Treatment
+        const tvShowReview = await reviewsService.addTVShowReview(tvShowId, author, review, dependencies);
+        //output
+        //const authHeader = request.headers.authorization;
+        //const accessToken = authHeader.split(" ")[1];
+        //const user = await accountService.verifyToken(accessToken, dependencies);
+
+        //analytics.track({
+        //    event: 'Create TV Show review',
+        //    userId: user,
+        //});
+        response.status(201).json(tvShowReview);
         return response.data;
     };
 
