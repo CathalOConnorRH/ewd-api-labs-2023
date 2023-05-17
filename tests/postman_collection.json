@@ -4,7 +4,7 @@
 		"name": "EWD Ass2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "11446383",
-		"_collection_link": "https://red-star-180997.postman.co/workspace/EWD-Assignment-2~9c2dc4a8-4eda-4d85-b507-a465702d8b75/collection/11446383-963e5f61-51db-44dd-805c-7df2520d77c8?action=share&creator=11446383&source=collection_link"
+		"_collection_link": "https://red-star-180997.postman.co/workspace/9c2dc4a8-4eda-4d85-b507-a465702d8b75/collection/11446383-963e5f61-51db-44dd-805c-7df2520d77c8?action=share&creator=11446383&source=collection_link"
 	},
 	"item": [
 		{
@@ -177,7 +177,7 @@
 									"",
 									" pm.test(\"Get Accounts: Response Object contains at least one account\",()=>{",
 									"         const jsonData = pm.response.json();",
-									"         pm.expect(jsonData.length).to.be.greaterThan(1);",
+									"         pm.expect(jsonData.length).to.be.greaterThan(0);",
 									"",
 									"  })"
 								],
@@ -185,6 +185,9 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -198,6 +201,15 @@
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{url}}/api/accounts",
 							"host": [
@@ -284,12 +296,7 @@
 									"",
 									"pm.test(\"Get Favourites: Successful Response includes the correct data\",()=>{",
 									"    const jsonData = pm.response.json();",
-									"//    pm.expect(jsonData.id).to.be.a(\"string\");",
-									"//    pm.expect(jsonData.firstName).to.eql(pm.environment.get(\"firstName\"));",
-									"//    pm.expect(jsonData.lastName).to.eql(pm.environment.get(\"lastName\"));",
-									"//    pm.expect(jsonData.email).to.eql(pm.environment.get(\"email\").toLowerCase());",
-									"",
-									"",
+									"    pm.expect(jsonData).to.contain(1234)",
 									"});"
 								],
 								"type": "text/javascript"
@@ -430,6 +437,52 @@
 					"response": []
 				},
 				{
+					"name": "Get Movie images by iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie images By Id Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Movie images By Id contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.backdrops.length).greaterThan(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/movies/{{movieId}}/images",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"{{movieId}}",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Movie reviews by movie id",
 					"event": [
 						{
@@ -442,12 +495,8 @@
 									"pm.test(\"Get Movie reviews: Response Object contains contains the correct properties\", () => {",
 									"    const jsonData = pm.response.json();",
 									"    pm.expect(jsonData.results[0].content).to.be.a('string');",
-									"    pm.expect(parseInt(jsonData.results[0].movieId)).to.be.eql(parseInt(pm.environment.get(\"movieId\")));",
-									"    pm.expect(jsonData.results.length).to.be.eql(jsonData.results[0].total_results);",
+									"    pm.expect(parseInt(jsonData.id)).to.be.eql(parseInt(pm.environment.get(\"movieId\")));",
 									"",
-									"    pm.environment.set(\"movieId\",jsonData.results[0].movieId);",
-									"    pm.environment.set(\"movieTitle\", jsonData.results[0].title);",
-									"    pm.environment.set(\"release_date\", jsonData.results[0].release_date);",
 									"    pm.environment.set(\"total_results\", jsonData.results.total_results);",
 									"",
 									"});"
@@ -485,7 +534,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Movie reviews by movie id Copy",
+					"name": "Add Movie review by movie id",
 					"event": [
 						{
 							"listen": "test",
@@ -497,7 +546,7 @@
 									"pm.test(\"Get Movie reviews - add review: Response Object contains contains the correct properties\", () => {",
 									"    const jsonData = pm.response.json();",
 									"    pm.expect(jsonData.content).to.be.a('string');",
-									"    pm.expect(jsonData.movieId).to.be.eql(pm.environment.get(\"movieId\"));",
+									"    pm.expect(parseInt(jsonData.movieId)).to.be.eql(pm.environment.get(\"movieId\"));",
 									"    pm.expect(jsonData.content).to.eql(\"this is a test review for movie \" + pm.environment.get(\"movieId\")); ",
 									"",
 									"    pm.environment.set(\"reviewId\", jsonData.id);",
@@ -523,7 +572,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"author\": \"coconnor\",\n  \"review\": \"this is a test review for movie {{movieId}}\"\n}",
+							"raw": "{\n  \"author\": \"{{firstName}} {{lastName}}\",\n  \"review\": \"this is a test review for movie {{movieId}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -546,7 +595,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Movie reviews by movie id Copy",
+					"name": "Get Movie reviews by movie id",
 					"event": [
 						{
 							"listen": "test",
@@ -598,6 +647,215 @@
 								"movies",
 								"{{movieId}}",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie recommendations by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie recommendations: Successful Request\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Movie recommendations : Response Object contains contains the correct properties\", () => {",
+									"    var jsonData = pm.response.json()",
+									"    pm.expect(jsonData.results.length).to.be.greaterThan(1);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/movies/{{movieId}}/recommendations",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"{{movieId}}",
+								"recommendations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Genres",
+			"item": [
+				{
+					"name": "Add Genre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add Genre: Successful Request\",()=>pm.response.to.have.status(201))",
+									"",
+									"",
+									"pm.test(\"Add Genre  - add genre: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.be.a('string');",
+									"    pm.expect(jsonData.name).to.be.a('string');",
+									"",
+									"    pm.environment.set(\"genreId\", jsonData.id);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Comedy\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/genres/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"genres",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get genres",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Genres: Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"",
+									"pm.test(\"Get Genres: Response Object contains contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].name).to.be.a('string');",
+									"    pm.expect(jsonData[0].id).to.be.a('string');",
+									"    pm.expect(jsonData.length).to.be.greaterThan(0);",
+									"",
+									"    pm.environment.set(\"genreId\",jsonData[0].id);",
+									"    pm.environment.set(\"genreName\", jsonData[0].name);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/genres",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"genres"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Genre by iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Genre By Id Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Genre By Id contains the correct properties\", () => {",
+									"    //parse the response JSON and test three properties",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"genreName\"));",
+									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"genreId\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/genres/{{genreId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"genres",
+								"{{genreId}}"
 							]
 						}
 					},
@@ -703,6 +961,52 @@
 								"api",
 								"tvshows",
 								"{{tvShowId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get TV Show images by iD Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie images By Id Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Movie images By Id contains the correct properties\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.backdrops.length).greaterThan(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tvshows/{{tvShowId}}/images",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tvshows",
+								"{{tvShowId}}",
+								"images"
 							]
 						}
 					},
@@ -886,6 +1190,53 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get TV Show recommendations by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get TV Show recommendations: Successful Request\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get TV Show recommendations : Response Object contains contains the correct properties\", () => {",
+									"    var jsonData = pm.response.json()",
+									"    pm.expect(jsonData.results.length).to.be.greaterThan(1);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tvshows/{{tvShowId}}/recommendations",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tvshows",
+								"{{tvShowId}}",
+								"recommendations"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -893,7 +1244,54 @@
 			"name": "Actor",
 			"item": [
 				{
-					"name": "Get actors by id",
+					"name": "Get actor by iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Actor By Id Successful Response\",()=>pm.response.to.have.status(200))",
+									"",
+									"pm.test(\"Get Actor By Id contains the correct properties\", () => {",
+									"    //parse the response JSON and test three properties",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.name).to.eql(\"Jenna Ortega\");",
+									"    pm.expect(responseJson.id).to.eql(974169);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/person/974169",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"person",
+								"974169"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get actors images by id",
 					"event": [
 						{
 							"listen": "test",
@@ -935,54 +1333,6 @@
 								"person",
 								"974169",
 								"images"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get TV Show by iD",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Get TVShow By Id Successful Response\",()=>pm.response.to.have.status(200))",
-									"",
-									"pm.test(\"Get TVShow By Id contains the correct properties\", () => {",
-									"    //parse the response JSON and test three properties",
-									"    const responseJson = pm.response.json();",
-									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"tvShowTitle\"));",
-									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"tvShowId\"));",
-									"    pm.expect(responseJson.first_air_date).to.eql(pm.environment.get(\"first_air_date\"));",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{authToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/tvshows/{{tvShowId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"tvshows",
-								"{{tvShowId}}"
 							]
 						}
 					},

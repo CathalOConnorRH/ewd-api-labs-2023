@@ -35,6 +35,9 @@ const createMoviesRouter = (dependencies, analytics) => {
     router.route('/:id/reviews')
         .post(moviesController.setMovieReview);
 
+    router.route('/:id/recommendations')
+        .get(moviesController.getMovieRecommendations);
+
     return router;
 };
 export default createMoviesRouter;

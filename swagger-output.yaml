@@ -1,0 +1,530 @@
+openapi: 3.0.3
+info:
+  title: EWD Ass2
+  version: 1.0.0-oas3-public
+  contact: {}
+servers:
+  - url: 'localhost:8080'
+paths:
+  /metrics:
+    get:
+      tags:
+        - Metrics
+      summary: Get Metrics
+      description: Get Metrics
+      operationId: getMetrics
+      responses:
+        '200':
+          description: 'Get Detailed metrics from the node application'
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "# HELP process_cpu_user_seconds_total Total user CPU time spent in seconds.\n
+                          # TYPE process_cpu_user_seconds_total counter\n
+                          process_cpu_user_seconds_total 0.699307\n...."
+  /api/accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Get Accounts
+      description: Get Accounts
+      operationId: getAccounts
+      responses:
+        '200':
+          description: 'Get list of accounts'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The user ID.
+                    firstName:
+                      type: string
+                      description: The users first name.
+                    lastName:
+                      type: string
+                      description: The users last name.
+                    email:
+                      type: string
+                      description: The users email.
+                    password:
+                      type: string
+                      description: The users password.
+                    favourites:
+                      type: array
+                      description: The users favourites.
+                      items:
+                        type: object
+    post:
+      tags:
+        - Accounts
+      summary: Add account
+      description: Add account
+      operationId: addAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: ''
+                firstName:
+                  type: string
+                  example: ''
+                lastName:
+                  type: string
+                  example: ''
+                password:
+                  type: string
+                  example: ''
+            example:
+              email: 'test@email.com'
+              firstName: 'Cathal'
+              lastName: 'O Connor'
+              password: 'Hunter1!'
+      responses:
+        '201':
+          description: 'Account created'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The user ID.
+                  firstName:
+                    type: string
+                    description: The users first name.
+                  lastName:
+                    type: string
+                    description: The users last name.
+                  email:
+                    type: string
+                    description: The users email.
+                  password:
+                    type: string
+                    description: The users password.
+                  favourites:
+                    type: array
+                    description: The users favourites.
+                    items:
+                      type: object
+  /api/accounts/security/token/:
+    post:
+      tags:
+        - Accounts
+      summary: Token
+      description: Token
+      operationId: token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: ''
+                password:
+                  type: string
+                  example: ''
+            example:
+              email: 'test@email.com'
+              password: 'Hunter1!'
+      responses:
+        '200':
+          description: 'Returns bearer token on sucessful authentication'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Bearer Token.
+  /api/accounts/{accountId}/favourites:
+    get:
+      tags:
+        - Accounts
+      summary: Get Favourites
+      description: Get Favourites
+      operationId: getFavourites
+      responses:
+        '200':
+          description: 'Returns array of favourites'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The users favourites ID.
+    post:
+      tags:
+        - Accounts
+      summary: set Favourites
+      description: set Favourites
+      operationId: setFavourites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: number
+                  example: 1234
+            example:
+              movieId: 1234
+      responses:
+        '200':
+          description: 'Returns array of favourites with newly added favourite'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The user ID.
+                    firstName:
+                      type: string
+                      description: The users first name.
+                    lastName:
+                      type: string
+                      description: The users last name.
+                    email:
+                      type: string
+                      description: The users email.
+                    password:
+                      type: string
+                      description: The users password.
+                    favourites:
+                      type: array
+                      description: The users favourites.
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The users favourites ID.
+    parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/movies:
+    get:
+      tags:
+        - Movies
+      summary: Get movies
+      description: Get movies
+      operationId: getMovies
+      responses:
+        '200':
+          description: 'Returns a list of movies'
+  /api/movies/{movieId}:
+    get:
+      tags:
+        - Movies
+      summary: Get Movie by iD
+      description: Get Movie by iD
+      operationId: getMovieById
+      responses:
+        '200':
+          description: 'Returns details of requested movie'
+    parameters:
+      - name: movieId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/movies/{movieId}/images:
+    get:
+      tags:
+        - Movies
+      summary: Get Movie images by iD
+      description: Get Movie images by iD
+      operationId: getMovieImagesById
+      responses:
+        '200':
+          description: 'Returns images of requested movie'
+    parameters:
+      - name: movieId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/movies/{movieId}/similar:
+    get:
+      tags:
+        - Movies
+      summary: Get similar Movies by iD
+      description: Get similar Movies by iD
+      operationId: getSimilarMovieById
+      responses:
+        '200':
+          description: 'Returns similar movies of requested movie'
+    parameters:
+      - name: movieId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/movies/{movieId}/recommendations:
+    get:
+      tags:
+        - Movies
+      summary: Get Movie recommendations by iD
+      description: Get Movie recommendations by iD
+      operationId: getMovieRecommendationsById
+      responses:
+        '200':
+          description: 'Returns recommendations of requested movie'
+    parameters:
+      - name: movieId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/reviews/movies/{movieId}:
+    get:
+      tags:
+        - Movies
+        - Reviews
+      summary: Get Movie reviews by movie id
+      description: Get Movie reviews by movie id
+      operationId: getMovieReviewsByMovieId
+      responses:
+        '200':
+          description: 'Returns reviews of requested movie'
+    post:
+      tags:
+        - Movies
+        - Reviews
+      summary: Add Movie reviews by movie id
+      description: Add Movie reviews by movie id
+      operationId: addMovieReviewsByMovieId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author:
+                  type: string
+                  example: coconnor
+                review:
+                  type: string
+                  example: this is a test review for movie 
+            example:
+              author: Cathal O'Connor
+              review: this is a test review for movie 
+      responses:
+        '200':
+          description: 'Returns details of added review'
+    parameters:
+      - name: movieId
+        in: path
+        required: true
+        schema:
+          type: string
+
+  /api/tvshows:
+    get:
+      tags:
+        - TVShows
+      summary: Get tv shows
+      description: Get tv shows
+      operationId: getTvShows
+      responses:
+        '200':
+          description: 'Returns list of TV Shows'
+  /api/tvshows/{tvShowId}:
+    get:
+      tags:
+        - TVShows
+      summary: Get TV Show by iD
+      description: Get TV Show by iD
+      operationId: getTvShowById1
+      responses:
+        '200':
+          description: 'Returns details of TV Show by Id'
+    parameters:
+      - name: tvShowId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/tvshows/{tvShowId}/images:
+    get:
+      tags:
+        - TVShows
+      summary: Get TV Show images by iD
+      description: Get TV Show images by iD
+      operationId: getTvShowImagesById
+      responses:
+        '200':
+          description: 'Returns details of TV Show by Id'
+    parameters:
+      - name: tvShowId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/tvshows/{tvShowId}/similar:
+    get:
+      tags:
+        - TVShows
+      summary: Get similar TV Shows by iD
+      description: Get similar TV Shows by iD
+      operationId: getSimilarTvShowById
+      responses:
+        '200':
+          description: 'Returns similar tv shows of TV Show by Id'
+    parameters:
+      - name: tvShowId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/tvshows/{tvShowId}/recommendations:
+    get:
+      tags:
+        - TVShows
+      summary: Get TV Show recommendations by iD
+      description: Get TV Show recommendations by iD
+      operationId: getTvShowRecommendationsById
+      responses:
+        '200':
+          description: 'Returns recommendations of TV Show by Id'
+    parameters:
+      - name: tvShowId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/reviews/tvshows/{tvShowId}:
+    get:
+      tags:
+        - TVShows
+        - Reviews
+      summary: Get TV Show reviews by tv show id
+      description: Get TV Show reviews by tv show id
+      operationId: getTvShowReviewsByTvShowId
+      responses:
+        '200':
+          description: 'Returns reviews of TV Show by Id'
+    post:
+      tags:
+        - TVShows
+        - Reviews
+      summary: add TV Show review by tv show id
+      description: add TV Show review by tv show id
+      operationId: addTvShowReviewByTvShowId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author:
+                  type: string
+                  example: coconnor
+                review:
+                  type: string
+                  example: this is a test review for tv show 
+            example:
+              author: Cathal O'Connor
+              review: this is a test review for tv show 
+      responses:
+        '200':
+          description: 'Returns details of newly added review for TV show'
+    parameters:
+      - name: tvShowId
+        in: path
+        required: true
+        schema:
+          type: string
+          
+  /api/person/974169:
+    get:
+      tags:
+        - Actor
+      summary: Get actors by id
+      description: Get actors by id
+      operationId: getActorsById
+      responses:
+        '200':
+          description: 'Returns Actors details by Id'
+  /api/person/974169/images:
+    get:
+      tags:
+        - Actor
+      summary: Get actors images by id
+      description: Get actors images by id
+      operationId: getActorsImagesById
+      responses:
+        '200':
+          description: 'Returns Actors image details by Id'
+  /api/genres/:
+    get:
+      tags:
+        - Genres
+      summary: Get genres
+      description: Get genres
+      operationId: getGenres
+      responses:
+        '200':
+          description: 'Returns list of genres'
+  /api/genres/{genreId}:
+    get:
+      tags:
+        - Genres
+      summary: Get genres by Id
+      description: Get genres by Id
+      operationId: getGenresById
+      responses:
+        '200':
+          description: 'Returns list of genres'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The genre ID.
+                    name:
+                      type: string
+                      description: The genre name.
+    parameters:
+      - name: genreId
+        in: path
+        required: true
+        schema:
+          type: string
+tags:
+  - name: Metrics
+  - name: Accounts
+  - name: Movies
+  - name: TVShows
+  - name: Actor
+  - name: Reviews
+  - name: Genres

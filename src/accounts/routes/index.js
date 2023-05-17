@@ -4,31 +4,35 @@ import ValidationController from '../controllers/ValidationController'; //add to
 
 const createRouter = (dependencies, analytics) => {
     const router = express.Router();
+
     // load controller with dependencies
-    const accountsController = AccountsController(dependencies,analytics);
+    const accountsController = AccountsController(dependencies, analytics);
     const validationController = ValidationController(dependencies);//Add this lineLoad validation controller with dependencies
 
+    router.route('/security/token')
+        .post(accountsController.authenticateAccount);
+
     router.route('/')
-        .post(validationController.validateAccount,accountsController.createAccount);
+        .post(validationController.validateAccount, accountsController.createAccount);
+
+    router.route('/*')
+        .all(accountsController.verify);
 
     router.route('/')
         .get(accountsController.listAccounts);
 
     router.route('/:id')
         .get(accountsController.getAccount);
-    
+
     router.route('/:id')
         .put(accountsController.updateAccount);
-         
-    router.route('/security/token')
-        .post(accountsController.authenticateAccount);
-    
+
     router.route('/:id/favourites')
         .post(accountsController.addFavourite);
-    
+
     router.route('/:id/favourites')
         .get(accountsController.getFavourites);
-    
+
     return router;
 };
 export default createRouter;

@@ -8,11 +8,12 @@ const createPeopleRouter = (dependencies) => {
     const peopleController = PeopleController(dependencies);
     const accountsController = AccountsController(dependencies);
 
-    //router.route('/*')
-    //    .all(accountsController.verify); 
+    router.route('/*')
+        .all(accountsController.verify);
 
     router.route('/:id')
         .get(peopleController.getPerson);
+
     router.route('/:id/images')
         .get(peopleController.getPersonImages);
 

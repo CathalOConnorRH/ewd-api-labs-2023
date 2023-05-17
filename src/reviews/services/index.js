@@ -17,7 +17,7 @@ export default {
     }
     let localReviews = await movieReviewsRepository.get(movieId);
 
-    var obj = Object.assign({}, response.data.results, localReviews);
+    var obj = Object.assign(response.data.results, localReviews);
     response.data.results = obj;
     response.data.total_results = response.data.total_results + localReviews.length;
 

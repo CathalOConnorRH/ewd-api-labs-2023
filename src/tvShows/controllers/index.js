@@ -30,6 +30,16 @@ export default (dependencies) => {
 
     };
 
+    const getTvShowRecommendations = async (request, response, next) => {
+        //input
+        const tvShowId = request.params.id;
+        // Treatment
+        const tvShowRecommentations = await tvShowsService.getTvShowRecommendations(tvShowId, dependencies);
+        //output
+        response.status(200).json(tvShowRecommentations);
+
+    };
+
     const getTvShowReviews = async (request, response, next) => {
         //input
         const tvShowId = request.params.id;
@@ -69,6 +79,7 @@ export default (dependencies) => {
         getTvShowImages,
         getTvShowCredits,
         getTvShowSimilar,
-        getTvShowReviews
+        getTvShowReviews,
+        getTvShowRecommendations
     };
 };

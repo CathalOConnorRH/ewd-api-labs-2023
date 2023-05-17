@@ -22,10 +22,6 @@ export default class extends MovieRepository {
         return movieEntity;
     }
 
-    // async remove(userId) {
-    //     return this.model.findOneAndDelete(userId);
-    // }
-
     async get(movieId) {
         const reviews = await this.model.find();
         const reviews2 = reviews.filter(review => review.movieId == movieId).map(
@@ -33,11 +29,4 @@ export default class extends MovieRepository {
         );
         return reviews2;
     }
-
-    // async find() {
-    //     const accounts = await this.model.find();
-    //     return accounts.map((result) => {
-    //         return new MovieReview(result.id, result.movieId, result.author, result.review);
-    //     });
-    // }
 }

@@ -39,6 +39,21 @@ export default {
     }
     return response.data;
   },
+
+  getMovieRecommendations: async (movieId) => {
+    let response = "";
+    try {
+      response = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.TMDB_KEY}`
+      );
+    } catch (err) {
+      logger.error("Unable to get recommended movies for: " + movieId + " : " + err.code);
+
+      return err.code;
+    }
+    return response.data;
+  },
+
   getMovieReviews: async (movieId) => {
     let response = "";
     try {

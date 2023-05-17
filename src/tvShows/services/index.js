@@ -19,6 +19,12 @@ export default {
     );
     return response.data;
   },
+  getTvShowRecommendations: async (tvShowId) => {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/tv/${tvShowId}/recommendations?api_key=${process.env.TMDB_KEY}`
+    );
+    return response.data;
+  },
   getTvShowReviews: async (tvShowId) => {
     const response = await axios.get(
       `https://api.themoviedb.org/3/tv/${tvShowId}/reviews?api_key=${process.env.TMDB_KEY}`

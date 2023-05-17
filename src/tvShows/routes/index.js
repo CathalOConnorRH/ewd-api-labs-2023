@@ -9,7 +9,7 @@ const createTvShowsRouter = (dependencies) => {
     const accountsController = AccountsController(dependencies);
 
     router.route('/*')
-        .all(accountsController.verify); 
+        .all(accountsController.verify);
 
     router.route('/:id')
         .get(tvShowsController.getTvShow);
@@ -31,6 +31,9 @@ const createTvShowsRouter = (dependencies) => {
 
     router.route('/:id/similar')
         .get(tvShowsController.getTvShowSimilar);
+
+    router.route('/:id/recommendations')
+        .get(tvShowsController.getTvShowRecommendations);
     return router;
 };
 export default createTvShowsRouter;

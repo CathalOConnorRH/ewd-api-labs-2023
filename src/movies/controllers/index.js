@@ -82,6 +82,31 @@ export default (dependencies, analytics) => {
         response.status(status).json(movieSimilar);
     };
 
+    const getMovieRecommendations = async (request, response) => {
+        //input
+        const movieId = request.params.id;
+        // Treatment
+        const movieRecommendations = await moviesService.getMovieRecommendations(movieId, dependencies);
+        //output
+        const authHeader = request.headers.authorization;
+        const accessToken = authHeader.split(" ")[1];
+        const user = await accountService.verifyToken(accessToken, dependencies);
+        analytics.track({
+            event: 'Get Recommended Movies',
+            userId: user,
+            properties: {
+                movie: movieId
+            }
+        });
+
+        let status = 0;
+        if (movieRecommendations['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(movieRecommendations);
+    };
 
     const getMovie = async (request, response) => {
         //input
@@ -177,7 +202,6 @@ export default (dependencies, analytics) => {
     };
 
     const setMovieReview = async (request, response) => {
-        console.log("Created " + request.body);
         request.body.created_at = new Date();
         request.body.updated_at = new Date();
         request.body.id = uniqid();
@@ -194,6 +218,7 @@ export default (dependencies, analytics) => {
         getMovieImages,
         getMovieSimilar,
         getMovieReviews,
-        setMovieReview
+        setMovieReview,
+        getMovieRecommendations
     };
 };
