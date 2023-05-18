@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: EWD Ass2
-  version: 1.0.0-oas3-public
+  version: 1.0.0-oas3
   contact: {}
 servers:
   - url: 'localhost:8080'
@@ -117,6 +117,42 @@ paths:
                     description: The users favourites.
                     items:
                       type: object
+    put:
+      tags:
+        - Accounts
+      summary: Update Account
+      description: Update Account
+      operationId: updateAccount
+      responses:
+        '200':
+          description: 'Update an account'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The user ID.
+                    firstName:
+                      type: string
+                      description: The users first name.
+                    lastName:
+                      type: string
+                      description: The users last name.
+                    email:
+                      type: string
+                      description: The users email.
+                    password:
+                      type: string
+                      description: The users password.
+                    favourites:
+                      type: array
+                      description: The users favourites.
+                      items:
+                        type: object
   /api/accounts/security/token/:
     post:
       tags:
@@ -488,6 +524,15 @@ paths:
       summary: Get genres
       description: Get genres
       operationId: getGenres
+      responses:
+        '200':
+          description: 'Returns list of genres'
+    post:
+      tags:
+        - Genres
+      summary: Add genre
+      description: Add genre
+      operationId: addGenres
       responses:
         '200':
           description: 'Returns list of genres'

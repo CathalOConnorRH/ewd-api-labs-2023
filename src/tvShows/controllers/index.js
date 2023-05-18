@@ -1,6 +1,7 @@
 import tvShowsService from "./../services";
+import accountService from "../../accounts/services";
 
-export default (dependencies) => {
+export default (dependencies, analytics) => {
 
     const getTvShowImages = async (request, response, next) => {
         //input
@@ -55,7 +56,24 @@ export default (dependencies) => {
         // Treatment
         const tvShow = await tvShowsService.getTvShow(tvShowId, dependencies);
         //output
-        response.status(200).json(tvShow);
+        //output
+        const authHeader = request.headers.authorization;
+        const accessToken = authHeader.split(" ")[1];
+        const user = await accountService.verifyToken(accessToken, dependencies);
+        analytics.track({
+            event: 'Get tvShow by ID',
+            userId: user,
+            properties: {
+                tvShow: tvShowId
+            }
+        });
+        let status = 0;
+        if (tvShow['code']) {
+            status = 404;
+        } else {
+            status = 200;
+        }
+        response.status(status).json(tvShow);
     };
     const find = async (request, response, next) => {
         //input

@@ -1,22 +1,29 @@
-import { logger } from "../../utils/Winston";
 import accountService from "../services";
 
 export default (dependencies, analytics) => {
 
     const createAccount = async (request, response) => {
 
-        // Input
-        const { firstName, lastName, email, password } = request.body;
+        let requestBody = JSON.stringify(request.body);
+        let ValidationError = "fails to match the required pattern";
 
-        // Treatment
-        const account = await accountService.registerAccount(firstName, lastName, email, password, dependencies);
+        if (requestBody.includes(ValidationError)) {
+            return response.status(400).json(request.body);
+        } else {
+            // Input
+            const { firstName, lastName, email, password } = request.body;
 
-        //output
-        analytics.track({
-            event: 'Create Account',
-            userId: email,
-        });
-        response.status(201).json(account);
+            // Treatment
+            const account = await accountService.registerAccount(firstName, lastName, email, password, dependencies);
+
+            //output
+            analytics.track({
+                event: 'Create Account',
+                userId: email,
+            });
+            response.status(201).json(account);
+
+        }
     };
     const getAccount = async (request, response) => {
 
@@ -27,13 +34,6 @@ export default (dependencies, analytics) => {
         const account = await accountService.getAccount(accountId, dependencies);
 
         //output
-        // analytics.track({
-        //     event: 'Get Account by ID',
-        //     userId: account.email,
-        //     properties: {
-        //         accountId: accountId
-        //     }
-        // });
         response.status(200).json(account);
     };
     const listAccounts = async (request, response) => {

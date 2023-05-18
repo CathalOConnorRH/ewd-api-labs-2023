@@ -71,15 +71,6 @@ export default (dependencies, analytics) => {
         const { author, review } = request.body;
         // Treatment
         const tvShowReview = await reviewsService.addTVShowReview(tvShowId, author, review, dependencies);
-        //output
-        //const authHeader = request.headers.authorization;
-        //const accessToken = authHeader.split(" ")[1];
-        //const user = await accountService.verifyToken(accessToken, dependencies);
-
-        //analytics.track({
-        //    event: 'Create TV Show review',
-        //    userId: user,
-        //});
         response.status(201).json(tvShowReview);
         return response.data;
     };

@@ -9,7 +9,6 @@ import createReviewsRouter from './src/reviews/routes';
 import db from './src/config/db';
 import errorHandler from './src/utils/ErrorHandler';
 import successHandler from './src/utils/SuccessHandler';
-
 import createPeopleRouter from './src/people/routes';
 import { collectDefaultMetrics, register } from 'prom-client';
 import analytics from './src/utils/Analytics';
@@ -54,7 +53,7 @@ app.use('/api/accounts', createAccountsRouter(dependencies, analytics));
 app.use('/api/reviews', createReviewsRouter(dependencies, analytics));
 app.use('/api/tvshows', createTvShowsRouter(dependencies, analytics));
 app.use('/api/person', createPeopleRouter(dependencies, analytics));
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(port, () => {
   logger.info(`Server running at ${port}`);

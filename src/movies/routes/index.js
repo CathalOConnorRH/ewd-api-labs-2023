@@ -29,12 +29,6 @@ const createMoviesRouter = (dependencies, analytics) => {
     router.route('/:id/similar')
         .get(moviesController.getMovieSimilar);
 
-    router.route('/:id/reviews')
-        .get(moviesController.getMovieReviews);
-
-    router.route('/:id/reviews')
-        .post(moviesController.setMovieReview);
-
     router.route('/:id/recommendations')
         .get(moviesController.getMovieRecommendations);
 

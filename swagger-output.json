@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "EWD Ass2",
-    "version": "1.0.0-oas3-public",
+    "version": "1.0.0-oas3",
     "contact": {}
   },
   "servers": [
@@ -160,6 +160,58 @@
                       "description": "The users favourites.",
                       "items": {
                         "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Update Account",
+        "description": "Update Account",
+        "operationId": "updateAccount",
+        "responses": {
+          "200": {
+            "description": "Update an account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The user ID."
+                      },
+                      "firstName": {
+                        "type": "string",
+                        "description": "The users first name."
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "description": "The users last name."
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "The users email."
+                      },
+                      "password": {
+                        "type": "string",
+                        "description": "The users password."
+                      },
+                      "favourites": {
+                        "type": "array",
+                        "description": "The users favourites.",
+                        "items": {
+                          "type": "object"
+                        }
                       }
                     }
                   }
@@ -363,7 +415,82 @@
         "operationId": "getMovieById",
         "responses": {
           "200": {
-            "description": "Returns details of request movie"
+            "description": "Returns details of requested movie"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "movieId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/movies/{movieId}/images": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "summary": "Get Movie images by iD",
+        "description": "Get Movie images by iD",
+        "operationId": "getMovieImagesById",
+        "responses": {
+          "200": {
+            "description": "Returns images of requested movie"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "movieId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/movies/{movieId}/similar": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "summary": "Get similar Movies by iD",
+        "description": "Get similar Movies by iD",
+        "operationId": "getSimilarMovieById",
+        "responses": {
+          "200": {
+            "description": "Returns similar movies of requested movie"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "movieId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/movies/{movieId}/recommendations": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "summary": "Get Movie recommendations by iD",
+        "description": "Get Movie recommendations by iD",
+        "operationId": "getMovieRecommendationsById",
+        "responses": {
+          "200": {
+            "description": "Returns recommendations of requested movie"
           }
         }
       },
@@ -481,6 +608,81 @@
         }
       ]
     },
+    "/api/tvshows/{tvShowId}/images": {
+      "get": {
+        "tags": [
+          "TVShows"
+        ],
+        "summary": "Get TV Show images by iD",
+        "description": "Get TV Show images by iD",
+        "operationId": "getTvShowImagesById",
+        "responses": {
+          "200": {
+            "description": "Returns details of TV Show by Id"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "tvShowId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/tvshows/{tvShowId}/similar": {
+      "get": {
+        "tags": [
+          "TVShows"
+        ],
+        "summary": "Get similar TV Shows by iD",
+        "description": "Get similar TV Shows by iD",
+        "operationId": "getSimilarTvShowById",
+        "responses": {
+          "200": {
+            "description": "Returns similar tv shows of TV Show by Id"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "tvShowId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/tvshows/{tvShowId}/recommendations": {
+      "get": {
+        "tags": [
+          "TVShows"
+        ],
+        "summary": "Get TV Show recommendations by iD",
+        "description": "Get TV Show recommendations by iD",
+        "operationId": "getTvShowRecommendationsById",
+        "responses": {
+          "200": {
+            "description": "Returns recommendations of TV Show by Id"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "tvShowId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "/api/reviews/tvshows/{tvShowId}": {
       "get": {
         "tags": [
@@ -573,6 +775,79 @@
           }
         }
       }
+    },
+    "/api/genres/": {
+      "get": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Get genres",
+        "description": "Get genres",
+        "operationId": "getGenres",
+        "responses": {
+          "200": {
+            "description": "Returns list of genres"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Add genre",
+        "description": "Add genre",
+        "operationId": "addGenres",
+        "responses": {
+          "200": {
+            "description": "Returns list of genres"
+          }
+        }
+      }
+    },
+    "/api/genres/{genreId}": {
+      "get": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Get genres by Id",
+        "description": "Get genres by Id",
+        "operationId": "getGenresById",
+        "responses": {
+          "200": {
+            "description": "Returns list of genres",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The genre ID."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The genre name."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "genreId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     }
   },
   "tags": [
@@ -593,6 +868,9 @@
     },
     {
       "name": "Reviews"
+    },
+    {
+      "name": "Genres"
     }
   ]
 }

@@ -2,10 +2,10 @@ import express from 'express';
 import TvShowsController from '../controllers';
 import AccountsController from '../../accounts/controllers';
 
-const createTvShowsRouter = (dependencies) => {
+const createTvShowsRouter = (dependencies, analytics) => {
     const router = express.Router();
     // load controllers with dependencies
-    const tvShowsController = TvShowsController(dependencies);
+    const tvShowsController = TvShowsController(dependencies, analytics);
     const accountsController = AccountsController(dependencies);
 
     router.route('/*')

@@ -3,7 +3,7 @@ import genreService from "../services";
 
 export default (dependencies) => {
 
-    const createGenre = async (request, response, next) => {
+    const createGenre = async (request, response) => {
         // Input
         const { name } = request.body;
         // Treatment
@@ -11,7 +11,7 @@ export default (dependencies) => {
         //output
         response.status(201).json(genre);
     };
-    const getGenre = async (request, response, next) => {
+    const getGenre = async (request, response) => {
         //input
         const genreId = request.params.id;
         // Treatment
@@ -19,7 +19,7 @@ export default (dependencies) => {
         //output
         response.status(200).json(genre);
     };
-    const listGenres = async (request, response, next) => {
+    const listGenres = async (request, response) => {
         // Treatment
         const genre = await genreService.find(dependencies);
         //output

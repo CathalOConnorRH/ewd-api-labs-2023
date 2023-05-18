@@ -4,6 +4,8 @@ import GenresRepositoryMongo from '../genres/repositories/MongoGenreRepository';
 import MovieReviewsRepositoryMongo from '../reviews/repositories/MongoMovieReviewRepository';
 import TVShowReviewsRepositoryMongo from '../reviews/repositories/MongoTVShowReviewRepository';
 import AccountSchema from '../accounts/validators';
+import ReviewSchema from '../reviews/validators';
+
 import Authenticator from '../accounts/security/BCryptAuthenticator';
 import TokenManager from './../accounts/security/JWTToken';
 import logger from '../utils/Winston';
@@ -11,6 +13,7 @@ import logger from '../utils/Winston';
 const buildDependencies = () => {
   const dependencies = {
     accountSchema: AccountSchema,
+    reviewSchema: ReviewSchema,
     authenticator: new Authenticator(),
     tokenManager: TokenManager,
   };

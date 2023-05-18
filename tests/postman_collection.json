@@ -4,7 +4,7 @@
 		"name": "EWD Ass2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "11446383",
-		"_collection_link": "https://red-star-180997.postman.co/workspace/9c2dc4a8-4eda-4d85-b507-a465702d8b75/collection/11446383-963e5f61-51db-44dd-805c-7df2520d77c8?action=share&creator=11446383&source=collection_link"
+		"_collection_link": "https://red-star-180997.postman.co/workspace/EWD-Assignment-2~9c2dc4a8-4eda-4d85-b507-a465702d8b75/collection/11446383-963e5f61-51db-44dd-805c-7df2520d77c8?action=share&creator=11446383&source=collection_link"
 	},
 	"item": [
 		{
@@ -48,6 +48,67 @@
 			"name": "Accounts",
 			"item": [
 				{
+					"name": "Add account - Bad Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add Account: Successful Response\",()=>pm.response.to.have.status(400))",
+									"",
+									"pm.test(\"Add Account: Successful Response includes the correct data\",()=>{",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"details\");",
+									"    pm.expect(jsonData._original.firstName).to.eql(pm.environment.get(\"firstName\"));",
+									"    pm.expect(jsonData._original.lastName).to.eql(pm.environment.get(\"lastName\"));",
+									"    pm.expect(jsonData._original.email).to.eql(pm.environment.get(\"email\").toLowerCase());",
+									"",
+									"    pm.expect(jsonData.details[0].message).to.contain(\"fails to match the required pattern\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'))",
+									"pm.environment.set(\"lastName\",pm.variables.replaceIn('{{$randomLastName}}'))",
+									"pm.environment.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase())",
+									"pm.environment.set(\"password\",\"password\")",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"{{firstName}}\",\n  \"lastName\": \"{{lastName}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/accounts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Add account",
 					"event": [
 						{
@@ -66,7 +127,8 @@
 									"",
 									"    pm.environment.set(\"accountId\", jsonData.id);",
 									"",
-									"});"
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -383,6 +445,54 @@
 							"path": [
 								"api",
 								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie by iD - Bad ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Movie By Id Successful Response\",()=>pm.response.to.have.status(404))",
+									"",
+									"pm.test(\"Get Movie By Id contains the correct properties\", () => {",
+									"    //parse the response JSON and test three properties",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.message).to.eql(\"Request failed with status code 404\");",
+									"    pm.expect(responseJson.name).to.eql(\"AxiosError\");",
+									"    pm.expect(responseJson.status).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/movies/0000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"0000"
 							]
 						}
 					},
@@ -913,6 +1023,54 @@
 							"path": [
 								"api",
 								"tvshows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get TV Show by iD - Bad Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get TVShow By Id Successful Response\",()=>pm.response.to.have.status(404))",
+									"",
+									"pm.test(\"Get TVShow By Id contains the correct properties\", () => {",
+									"    //parse the response JSON and test three properties",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.message).to.eql(\"Request failed with status code 404\");",
+									"    pm.expect(responseJson.name).to.eql(\"AxiosError\");",
+									"    pm.expect(responseJson.status).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/movies/00000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"00000"
 							]
 						}
 					},
