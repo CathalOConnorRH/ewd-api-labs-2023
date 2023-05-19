@@ -9,27 +9,32 @@ Name: Cathal O'Connor
 - Feature 3 - Get Recommended Movies: Get a list of similar movies using a movie ID.
 - Feature 4 - Get Movie Credits: Get a list of actors in the movie using a movie ID.
 
-#### Added TV Shows Section to api which included the below features along with similar feature movies started with from the labs
+#### Added TV Shows Section to API which included the below features along with similar feature movies started with from the labs
 - Feature 5 - Get Similar TVShows: Get a list of similar TV Shows using a TV Show ID.  
 - Feature 6 - Get TVShows Images: Get a list of images for a TV Show using a TV Show ID.
 - Feature 7 - Get popular TVShows: Get a list of popular TV Shows using a TV Show ID.
 - Feature 8 - Get Recommended TVShows: Get a list of recommended TV Shows using a TV Show ID.
 - Feature 9 - Get TVShows Credits: Get a list of actors for a TV Show using a TV Show ID.
 
-#### Added Actors Section to api
+#### Added Actors Section to API
 - Feature 10 - Get Actor By Id: Get actor details by actor id
 - Feature 11 - Get Actor images by Id: Get a list of images for an actor using an actor id 
 
-#### Added Reviews Section to api
-- Feature 12 - Get Movie Reviews: Get a list of reviews for movies using a movie ID. Reviews come from TMDB and mongodb if any are added through this api
+#### Added Reviews Section to API
+- Feature 12 - Get Movie Reviews: Get a list of reviews for movies using a movie ID. Reviews come from TMDB and mongodb if any are added through this API.
 - Feature 13 - Add Movie Review: Add a movie review to mongo db using a movie Id
-- Feature 14 - Get TVShow Reviews: Get a list of reviews for tvshows using a movie ID. Reviews come from TMDB and mongodb if any are added through this api
-- Feature 15 - Add TVShow Review: Add a TV Show review to mongo db using a TV Show Id
+- Feature 14 - Get TVShow Reviews: Get a list of reviews for tvshows using a movie ID. Reviews come from TMDB and mongodb if any are added through this API.
+- Feature 15 - Add TVShow Review: Add a TV Show review to mongo db using a TV Show Id.
 
+#### Added Metrics for analytics
+- Feature 16 - Added metrics endpoint for runtime metrics gathering.
+
+#### Added Swagger docs 
+- Feature 17 - Swagger docs served from within the API.
 
 ## Installation Requirements
 
-This api is built using Github Codespaces/DevContainer. The files required are located in the .devcontainer folder. Instuctions on how to use are located here https://code.visualstudio.com/docs/devcontainers/containers
+This API is built using Github Codespaces/DevContainer. The files required are located in the .devcontainer folder. Instuctions on how to use are located here https://code.visualstudio.com/docs/devcontainers/containers
 
 
 To contribute or test this software you can run the commands below. 
@@ -50,7 +55,7 @@ followed by installation
 npm install
 ```
 
-To run the api server, run the following command and access the [api](http://localhost:8080) from this list when it's running
+To run the API server, run the following command and access the [API](http://localhost:8080) from this list when it's running
 ```bat
 npm start
 ```
@@ -60,7 +65,7 @@ npm start
 
 Before running this project you will need to create a `.env` file in the root directory and fill in the information below. 
 
-The key `MY_WRITE_KEY` is the api key from https://segment.com/ and is required for analytics of key functions being requested. 
+The key `MY_WRITE_KEY` is the API key from https://segment.com/ and is required for analytics of key functions being requested. 
 
 ```bat
 NODE_ENV=development
@@ -115,23 +120,23 @@ Extra validation is implemented in the post reviews route. This is to ensure rev
 ## Testing
 
 Testing is done through the use of `postman` manually and then through `newman`
-Once the api server is running, in a new terminal run the below command to rerun the tests. 
+Once the API server is running, in a new terminal run the below command to rerun the tests. 
 
 ```bat
 npm test
 ```
-Test results can be seen in the tests folder or [here](http://localhost:8080/reports/report.html) which is served by the api server. 
+Test results can be seen in the tests folder or [here](http://localhost:8080/reports/report.html) which is served by the API server. 
 
 ![](./images/tests-image.png)
 
 ## Integrating with React App
 
-The react fronend end from assignment 1 was updated so that all previous requests were using this api. 
-That included updating authentication and reviews to create and update etc on this api. 
+The react fronend end from assignment 1 was updated so that all previous requests were using this API. 
+That included updating authentication and reviews to create and update etc on this API. 
 
-Reviews are created in the mongodb for this api and are appended to the reviews array returned from TMDB. 
+Reviews are created in the mongodb for this API and are appended to the reviews array returned from TMDB. 
 
-The main updates are made on the branch `assignment2` and api changes can be seen [here](https://github.com/CathalOConnorRH/EWD-Assignment1/blob/Assignment2/src/api/tmdb-api.js)
+The main updates are made on the branch `assignment2` and API changes can be seen [here](https://github.com/CathalOConnorRH/EWD-Assignment1/blob/Assignment2/src/api/tmdb-api.js)
 
 ```Javascript
 export const getTVShow = (id) => {
@@ -171,6 +176,5 @@ This project uses a number of different middlewares for various features.
 - Feature 1 - Logging of HTTP requests using [Morgan](https://www.npmjs.com/package/morgan)
 - Feature 2 -  Use of [Winston](https://www.npmjs.com/package/winston) to enable error handling and  Logging in a structured format which incorporates [Morgan](https://www.npmjs.com/package/morgan) to ensure all logs follow a format and are stored/logged in sch a way that they can be injested into platforms that allow for analytics and automation using the logs (eg. [splunk](https://www.splunk.com/)). Logs are writen to a combined log file and a error specific file, and to the console. 
 - Feature 3 - Use of prom-client, a prometheus client for node that gathers and exports metrics which can be used to analyse server/container and node performance. These metrics are gathered every 30 secs (configurable) then forwarded to grafana cloud and graphed. THe JSON for the dashboard is in the GrafanaDashboard.json file. This was available online as part of the prom-client. 
-- Feature 4 - There was an attemp to use swagger autogen but it does not work with how the routes are generated currently. [`github issue`](https://github.com/davibaltar/swagger-autogen/issues/150). Swagger was manually generated and uploaded to [swaggerhub](https://app.swaggerhub.com/apis/CATOCONN/ewd/1.0.0-oas3), it is also available in the swagger-output.<jsoin/yaml> file in this repo. The json is served by the api under http://localhost:8080/docs/
+- Feature 4 - There was an attemp to use swagger autogen but it does not work with how the routes are generated currently. [`github issue`](https://github.com/davibaltar/swagger-autogen/issues/150). Swagger was then manually generated and uploaded to [swaggerhub](https://app.swaggerhub.com/apis/CATOCONN/ewd/1.0.0-oas3), it is also available in the swagger-output.<jsoin/yaml> file in this repo. The json is served by the API under http://localhost:8080/docs/
 - Feature 5 - Request ananlytics was implemented using Segment, this allows us to recored and analyse request details. This was added to certain key requests and not all requests for traffic/api limit purposes.
-
