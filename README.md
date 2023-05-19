@@ -32,6 +32,9 @@ Name: Cathal O'Connor
 #### Added Swagger docs 
 - Feature 17 - Swagger docs served from within the API.
 
+#### Added mock mongodb server
+- Feature 18 - Added mock mongodb server for testing purposes, to use it, set the `NODE_ENV` in the `.env` file to `test`
+
 ## Installation Requirements
 
 This API is built using Github Codespaces/DevContainer. The files required are located in the .devcontainer folder. Instuctions on how to use are located here https://code.visualstudio.com/docs/devcontainers/containers
@@ -168,7 +171,9 @@ Or run locall
 ```bat
 docker run <image_tag> --name <container_name>
 ```
-For the purposes of the demo, the containers for both the frontend, backend and mongodb were hosted on a VPS in linode.
+Prebuilt containers can be dowloaded from `quay.io` using the tags
+`quay.io/cathaloconnor/ewd-be:latest` for the backend
+`quay.io/cathaloconnor/ewd-fe:latest` for the frontend
 
 ## Independent learning.
 
