@@ -130,7 +130,7 @@ npm test
 ```
 Test results can be seen in the tests folder or [here](http://localhost:8080/reports/report.html) which is served by the API server. 
 
-![](./images/tests-image.png)
+![Newman tests](./images/tests-image.png)
 
 ## Integrating with React App
 
@@ -181,5 +181,9 @@ This project uses a number of different middlewares for various features.
 - Feature 1 - Logging of HTTP requests using [Morgan](https://www.npmjs.com/package/morgan)
 - Feature 2 -  Use of [Winston](https://www.npmjs.com/package/winston) to enable error handling and  Logging in a structured format which incorporates [Morgan](https://www.npmjs.com/package/morgan) to ensure all logs follow a format and are stored/logged in sch a way that they can be injested into platforms that allow for analytics and automation using the logs (eg. [splunk](https://www.splunk.com/)). Logs are writen to a combined log file and a error specific file, and to the console. 
 - Feature 3 - Use of prom-client, a prometheus client for node that gathers and exports metrics which can be used to analyse server/container and node performance. These metrics are gathered every 30 secs (configurable) then forwarded to grafana cloud and graphed. THe JSON for the dashboard is in the GrafanaDashboard.json file. This was available online as part of the prom-client. 
+![Grafana](./images/grafana.png)
 - Feature 4 - There was an attemp to use swagger autogen but it does not work with how the routes are generated currently. [`github issue`](https://github.com/davibaltar/swagger-autogen/issues/150). Swagger was then manually generated and uploaded to [swaggerhub](https://app.swaggerhub.com/apis/CATOCONN/ewd/1.0.0-oas3), it is also available in the swagger-output.<jsoin/yaml> file in this repo. The json is served by the API under http://localhost:8080/docs/
+![Swagger](./images/swagger.png)
+![Swagger Hub](./images/swaggerhub.png)
 - Feature 5 - Request ananlytics was implemented using Segment, this allows us to recored and analyse request details. This was added to certain key requests and not all requests for traffic/api limit purposes.
+![Segment](./images/segment.png)
